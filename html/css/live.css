@@ -1,0 +1,465 @@
+html, body {
+	margin: 0px;
+	padding: 0px;
+	font-size: 0px;
+	height: 100%;
+	font-family: 'Raleway' !important;
+}
+* {
+	font-family: 'Raleway' !important;
+}
+body {
+	background-color: #131313;
+	display: flex;
+	flex-flow: column;
+}
+.row {
+	margin: 0px;
+	padding: 0px;
+}
+.col-6 {
+	padding: 0;
+	margin: 0;
+}
+
+/* OVERLAY */
+.overlay {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100vw;
+	height: 100vh;
+	background-color: #131313;
+	z-index: 10000;
+}
+
+
+
+
+
+.middle {
+	cursor: pointer;
+	margin: 0 auto;
+	width: 40%;
+	min-width: 25vh;
+	height: 25vh;
+	background-color: #000000;
+	box-shadow: 0 0.25vh 0px 0px #87d403;
+	border-radius: 0.5vh 0.5vh 0 0;
+}
+.device {
+	position: absolute;
+	margin: 0 auto;
+	width: 40%;
+	min-width: 25vh;
+	height: 25vh;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	border-radius: 0.5vh 0.5vh 0 0;
+}
+.device-inside {
+	position: absolute;
+	margin: 0 auto;
+	width: 40%;
+	min-width: 25vh;
+	height: 25vh;
+	border-radius: 0.5vh 0.5vh 0 0;
+}
+#progressBar {
+	position: relative;	
+	margin: 1vh auto 0 auto;
+	width: 17vh;
+	height: 17vh;
+	border: 0.25vh solid #5a5a5a;
+	border-radius: 100%;
+	padding: 0.5vh;
+}
+.progressbar-text {
+	font-size: 5vh;
+}
+
+.cardview {
+	position: relative;
+	cursor: pointer;
+	margin: 0 auto;
+	width: 80%;
+	height: 23vh;
+	box-shadow: 0 0.25vh 0px 0px #87d403;
+	background-color: #212121;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	border-radius: 0.5vh 0.5vh 0 0;
+}
+.inside {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: 0.5vh 0.5vh 0 0;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.inside-info {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: 0.5vh 0.5vh 0 0;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.img-label {
+	margin: 2.5vh auto;
+	height: 10vh;
+	width: 10vh;
+}
+
+.power {
+	position: absolute;
+	bottom: 0;
+	display: table;
+	margin: 0 auto;
+	width: 100%;
+	height: 8vh;
+	border-radius: 0;
+	background-color: black;
+	opacity: 0.9;
+}
+
+.img-plus {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-image: url(../img/plus.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	margin: 1vh;
+	height: 5vh;
+	width: 5vh;
+}
+
+h1 {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	color: white;
+	font-size: 4vh;
+	letter-spacing: 1px;
+}
+
+h2 {
+	text-align: center;
+	color: white;
+	font-size: 3vh;
+	letter-spacing: 2px;
+	padding: 1.5vh 0 0.5vh 0;
+}
+.divider {
+	width: 10%;
+	margin: 0 auto;
+	padding: 0 0;
+	height: 0.25vh;
+	background-color: #87d403;
+}
+
+#solar .inside {
+	background-image: url(../img/bg-solar.png);
+}
+#solar .inside-info {
+	background-image: linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)), url(../img/bg-solar.png);
+}
+#grid .inside {
+	background-image: url(../img/bg-grid.png);
+}
+#grid .inside-info {
+	background-image: linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)), url(../img/bg-grid.png);
+}
+#battery .inside {
+	background-image: url(../img/bg-battery.png);
+}
+#battery .inside-info {
+	background-image: linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)), url(../img/bg-battery.png);
+}
+#load .inside {
+	background-image: url(../img/bg-load.png);
+}
+#load .inside-info {
+	background-image: linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)), url(../img/bg-load.png);
+}
+
+#device h3 {
+	color: white;
+	font-size: 2.75vh;
+	letter-spacing: 1px;
+	padding: 1.5vh 7.5%;
+}
+#device span {
+	float: right;
+	color: #87d403;
+}
+
+#battery h3 {
+	color: white;
+	font-size: 2.75vh;
+	letter-spacing: 1px;
+	padding: 1.25vh 7.5%;
+}
+#battery span {
+	float: right;
+	color: #87d403;
+}
+
+#grid h3 {
+	color: white;
+	font-size: 2.75vh;
+	letter-spacing: 1px;
+	padding: 2vh 7.5%;
+}
+#grid span {
+	float: right;
+	color: #87d403;
+}
+
+#load h3 {
+	color: white;
+	font-size: 2.75vh;
+	letter-spacing: 1px;
+	padding: 2vh 7.5%;
+}
+#load span {
+	float: right;
+	color: #87d403;
+}
+
+#solar h3 {
+	color: white;
+	font-size: 2.75vh;
+	letter-spacing: 1px;
+	padding: 1.25vh 7.5%;
+}
+#solar span {
+	float: right;
+	color: #87d403;
+}
+
+.top-left .arrow-line, 
+.bottom-left .arrow-line {
+	height: 7.5vh;
+}
+.top-left .arrow-line .line, 
+.bottom-left .arrow-line .line {
+	position: absolute;
+	width: 0.5vh;
+	height: 7.5vh;
+	background-color: #87d403;
+	margin-left: 37.5%;
+}
+.top-left .arrow-line .arrow, 
+.bottom-left .arrow-line .arrow {
+	position: absolute;
+	margin-left: calc(37.5% - 1.25vh);
+	width: 3vh;
+	height: 3vh;
+	color: white;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+
+.top-right .arrow-line,
+.bottom-right .arrow-line {
+	height: 7.5vh;
+}
+.top-right .arrow-line .line,
+.bottom-right .arrow-line .line {
+	position: absolute;
+	width: 0.5vh;
+	height: 7.5vh;
+	background-color: #87d403;
+	margin-left: 12.5%;
+}
+.top-right .arrow-line .arrow, 
+.bottom-right .arrow-line .arrow {
+	position: absolute;
+	margin-left: calc(12.5% - 1.25vh);
+	width: 3vh;
+	height: 3vh;
+	color: white;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+.top-left {
+	height: 37.5vh;
+	width: 50%;
+	padding-top: 7vh;
+	visibility: hidden;
+}
+.top-left .img-label {
+	background: url(../img/img-solar.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+
+.top-right {
+	height: 37.5vh;
+	width: 50%;
+	padding-top: 7vh;
+	visibility: hidden;
+}
+.top-right .img-label {
+	background: url(../img/img-grid.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+
+.bottom-left {
+	height: 37.5vh;
+	width: 50%;	
+	visibility: hidden;
+}
+.bottom-left .img-label {
+	background: url(../img/img-battery.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+
+.bottom-right {
+	height: 37.5vh;
+	width: 50%;
+	visibility: hidden;
+}
+.bottom-right .img-label {
+	background: url(../img/img-load.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+
+h3 .label {
+	float: none !important;
+	color: white !important;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	padding-right: 5px;
+}
+
+
+
+
+
+.arrow-up {
+	margin: 0vh;
+	background-image: url(../img/arrow-up.png);
+}
+.arrow-down {
+	margin: 4.8vh 0;
+	background-image: url(../img/arrow-down.png);
+}
+
+
+
+
+
+.clear {
+	clear: both;
+}
+
+.hide {
+	display: none;
+}
+
+
+
+
+
+/* Modal Style */
+.modal {
+	font-size: 14px !important;
+}
+.modal .container-fluid {
+	margin: 0;
+	padding: 0;
+}
+.modal-dialog {
+	max-width: 5000px;
+	width: 90%;
+	margin-top: 2vh;
+	margin-bottom: 2vh;
+}
+.modal-content {
+	border-radius: 10px;
+	background-color: #111111;
+	margin: 0;
+	padding: 0;
+}
+.modal .col-6 {
+	padding: 1.5vw 1.5vw 1.5vw 1.5vw;
+}
+
+.controller {
+	position: relative;
+	cursor: pointer;
+	margin: 0 auto;
+	width: 100%;
+	height: 21vh;
+	box-shadow: 0 0.25vh 0px 0px #87d403;
+	background-color: #212121;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	border-radius: 0.5vh 0.5vh 0 0;
+}
+
+.controller h2 {
+	text-align: center;
+	color: white;
+	font-size: 3vh;
+	letter-spacing: 2px;
+	padding: 1vh 0 0.5vh 0;
+}
+.controller h3 {
+	color: white;
+	font-size: 2.75vh;
+	letter-spacing: 1px;
+	padding: 1vh 7.5%;
+}
+.controller span {
+	float: right;
+	color: #87d403;
+}
+
+.controller .img-label {
+	margin: 2vh auto;
+	height: 8vh;
+	width: 8vh;
+	background: url(../img/img-solar.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+.controller .inside {
+	background-image: url(../img/bg-solar.png);
+}
+.controller .inside-info {
+	background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url(../img/bg-solar.png);
+}
+
+.mb-1vh {
+	margin-bottom: 1vh;
+}

@@ -1,0 +1,283 @@
+html, body {
+	margin: 0px;
+	padding: 0px;
+	font-size: 0px;
+	height: 100%;
+	font-family: 'Raleway' !important;
+	overflow-x: hidden;
+}
+* {
+	font-family: 'Raleway' !important;
+}
+body {
+	background-color: #131313;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-flow: column;
+	flex-flow: column;
+}
+.row {
+	margin: 0px;
+	padding: 0px;
+}
+
+/* OVERLAY */
+.overlay {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100vw;
+	height: 100vh;
+	background-color: #131313;
+	z-index: 10000;
+}
+
+/* IMAGES + SLIDER */
+div.top {
+	position: relative;
+	-webkit-box-flex: 1;
+	-ms-flex-positive: 1;
+	flex-grow: 1;
+	-ms-flex-negative: 1;
+	flex-shrink: 1;
+	-ms-flex-preferred-size: auto;
+	flex-basis: auto;
+	background-position: center;
+	background-size: cover;
+	background-color: #090909;
+}
+div.top #uploadButton {
+	width: 100%;
+	background: url(../img/upload-image.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 50vh;
+}
+div.top #uploadButton .button {
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+}
+div.top .images {
+	width: 100vw;
+	/*height: 100%;*/
+	padding: 0;
+	margin: 0;
+}
+div.top .images div {
+	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+div.top .images a {
+	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+div.top #btnRemoveImage {
+	width: 5vh;
+	height: 5vh;
+	position: absolute;
+	right: 1.25vh;
+	top: 1.25vh;
+	background: url(../img/ic_close.png);
+	background-position: center;
+	background-size: contain;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+div.top #slider {
+	position: absolute;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	top: 15%;
+	right: 0;
+	width: 50%;
+	height: 70%;
+	background-color: #151515;
+	-webkit-transform: translateX( calc(100% - 10.5vh) );
+	transform: translateX( calc(100% - 10.5vh) );
+}
+div.top #slideToggle {
+	width: 10.5vh !important;
+	height: 100%;
+	cursor: pointer;
+	background-image: url(../img/slideToggle-closed.png);
+	background-repeat: no-repeat;
+	background-position: left;
+	background-size: contain;
+}
+div.top #slideContent {
+	width: calc(100% - 10.55vh);
+	white-space: nowrap;
+}
+div.top #slideContent h3 {
+	font-size: 2.5vh;
+	color: white;
+	padding: 2.5vh;
+	padding-bottom: 5vh;
+	font-weight: bold;
+	letter-spacing: 2px;
+	white-space: nowrap;
+}
+div.top #slideContent h4, h5 {
+	font-size: 2.5vh;
+	color: white;
+	padding: 1vh;
+	padding-left: 2.5vh;
+	letter-spacing: 2px;
+	white-space: nowrap;
+}
+div.top #slideContent h5 {
+	padding-left: 5vh;
+	color: gray;
+	white-space: nowrap;
+}
+div.top #slideContent a {
+	text-decoration: none;
+	white-space: nowrap;
+}
+.slide-in {
+	animation: slide-in 0.5s forwards;
+	-webkit-animation: slide-in 0.5s forwards;
+}
+.slide-out {
+	animation: slide-out 0.5s forwards;
+	-webkit-animation: slide-out 0.5s forwards;
+}
+@keyframes slide-in {
+	100% { -webkit-transform: translateX(0%); transform: translateX(0%); }
+}
+@-webkit-keyframes slide-in {
+	100% { -webkit-transform: translateX(0%); }
+}
+@keyframes slide-out {
+	0% { -webkit-transform: translateX(0%); transform: translateX(0%); }
+	100% { -webkit-transform: translateX( calc(100% - 10.5vh) ); transform: translateX( calc(100% - 10.5vh) ); }
+}
+@-webkit-keyframes slide-out {
+	0% { -webkit-transform: translateX(0%); }
+	100% { -webkit-transform: translateX( calc(100% - 10.5vh) ); }
+}
+
+
+
+
+
+/* INFO PANELS */
+div.bottom {
+	position: relative;
+	-webkit-box-flex: 0;
+	-ms-flex-positive: 0;
+	flex-grow: 0;
+	-ms-flex-negative: 1;
+	flex-shrink: 1;
+	-ms-flex-preferred-size: auto;
+	flex-basis: auto;
+}
+.table-card {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #333333;
+	padding: 0px;
+	margin: 0px;
+	cursor: pointer;
+}
+.table-card div {
+	margin: 4vh 0px;
+	font-size: 0px;
+}
+img.img-x {
+	height: 3.5vh;
+}
+.table-card div h4.name {
+	padding: 1vh 0px;
+	color: white;
+	margin: 0px 10px;
+	font-size: 2.5vh;
+	letter-spacing: 2px;
+}
+img.img-under {
+	height: 0.3vh;
+	margin-bottom: 1.5vh;
+}
+.table-card div h4.data {
+	color: #7b7b7b;
+	margin: 0px;
+	font-size: 2.5vh;
+}
+
+.bottom #textBox {
+	background-color: rgba(19, 19, 19, 0.9);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	color: white;
+	overflow: hidden;
+}
+.bottom #textBox textarea {
+	background-color: rgba(0, 0, 0, 0);
+	border: 0;
+	width: 100%;
+	height: 100%;
+	padding: 5vh;
+	font-size: 2.5vh;
+	color: white;
+}
+.bottom #btnClose {
+	display: none;
+	width: 5vh;
+	height: 5vh;
+	position: absolute;
+	right: 1.25vh;
+	top: -6.25vh;
+	background: url(../img/ic_close.png);
+	background-position: center;
+	background-size: contain;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+.bottom #btnSave {
+	display: none;
+	height: 5vh;
+	width: 8.91vh;
+	position: absolute;
+	right: 7.5vh;
+	top: -6.25vh;
+	background: url(../img/ic_save.png);
+	background-position: center;
+	background-size: contain;
+	cursor: pointer;
+}
+
+/* PORTRAIT SCREEN STYLE */
+@media (orientation: portrait) {
+	div.top #slider {
+		width: 85%;
+	}
+}
+
+/* HELP CLASSES */
+.border-left-0 {
+	border-left: 0px;
+}
+.border-top-0 {
+	border-top: 0px;
+}
+.border-right-0 {
+	border-right: 0px;
+}
+.border-bottom-0 {
+	border-bottom: 0px;
+}
+.border-none {
+	border: 0px;
+}

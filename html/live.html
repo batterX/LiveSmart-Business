@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="description" content="The „Live&amp;Smart“ monitoring and controlling tool designed by batterX® is a sophisticated energy management for optimizing production and consumption." />
+		<title>BatterX | Live Data</title>
+		<link rel="stylesheet" href="css/components/fonts.css">
+		<link rel="stylesheet" type="text/css" href="css/components/normalize.css">
+		<link rel="stylesheet" type="text/css" href="css/components/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/live.css">
+	</head>
+	
+	<body>
+		
+		<!-- OVERLAY -->
+		<div class="overlay"></div>
+		
+		<!-- MODAL -->
+		<div class="modal fade">
+			<div class="modal-dialog" role="dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="row">
+								<!-- SOLAR 1 -->
+								<div class="col-6">
+									<div id="controller1" class="controller">
+										<!-- SOLAR 1 TOTAL -->
+										<div id="controller1Power" class="inside">
+											<div class="img-label"></div>
+											<div class="power">
+												<h1 id="controller1PowerTotal">SOLAR</h1>
+											</div>
+											<div class="img-plus"></div>
+										</div>
+										<!-- SOLAR 1-1 -->
+										<div id="controllerInfo11" class="inside-info hide">
+											<h2>SOLAR 1</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage11">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent11">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower11">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 1-2 -->
+										<div id="controllerInfo12" class="inside-info hide">
+											<h2>SOLAR 2</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage12">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent12">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower12">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 1-3 -->
+										<div id="controllerInfo13" class="inside-info hide">
+											<h2>SOLAR 3</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage13">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent13">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower13">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 1-4 -->
+										<div id="controllerInfo14" class="inside-info hide">
+											<h2>SOLAR 4</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage14">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent14">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower14">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+									</div>
+								</div>
+								<!-- SOLAR 2 -->
+								<div class="col-6">
+									<div id="controller2" class="controller">
+										<!-- SOLAR 2 TOTAL -->
+										<div id="controller2Power" class="inside">
+											<div class="img-label"></div>
+											<div class="power">
+												<h1 id="controller2PowerTotal">SOLAR</h1>
+											</div>
+											<div class="img-plus"></div>
+										</div>
+										<!-- SOLAR 2-1 -->
+										<div id="controllerInfo21" class="inside-info hide">
+											<h2>SOLAR 1</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage21">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent21">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower21">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 2-2 -->
+										<div id="controllerInfo22" class="inside-info hide">
+											<h2>SOLAR 2</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage22">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent22">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower22">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 2-3 -->
+										<div id="controllerInfo23" class="inside-info hide">
+											<h2>SOLAR 3</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage23">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent23">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower23">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 2-4 -->
+										<div id="controllerInfo24" class="inside-info hide">
+											<h2>SOLAR 4</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage24">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent24">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower24">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+									</div>
+								</div>
+								<!-- SOLAR 3 -->
+								<div class="col-6">
+									<div id="controller3" class="controller">
+										<!-- SOLAR 3 TOTAL -->
+										<div id="controller3Power" class="inside">
+											<div class="img-label"></div>
+											<div class="power">
+												<h1 id="controller3PowerTotal">SOLAR</h1>
+											</div>
+											<div class="img-plus"></div>
+										</div>
+										<!-- SOLAR 3-1 -->
+										<div id="controllerInfo31" class="inside-info hide">
+											<h2>SOLAR 1</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage31">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent31">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower31">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 3-2 -->
+										<div id="controllerInfo32" class="inside-info hide">
+											<h2>SOLAR 2</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage32">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent32">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower32">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 3-3 -->
+										<div id="controllerInfo33" class="inside-info hide">
+											<h2>SOLAR 3</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage33">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent33">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower33">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 3-4 -->
+										<div id="controllerInfo34" class="inside-info hide">
+											<h2>SOLAR 4</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage34">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent34">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower34">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+									</div>
+								</div>
+								<!-- SOLAR 4 -->
+								<div class="col-6">
+									<div id="controller4" class="controller">
+										<!-- SOLAR 4 TOTAL -->
+										<div id="controller4Power" class="inside">
+											<div class="img-label"></div>
+											<div class="power">
+												<h1 id="controller4PowerTotal">SOLAR</h1>
+											</div>
+											<div class="img-plus"></div>
+										</div>
+										<!-- SOLAR 4-1 -->
+										<div id="controllerInfo41" class="inside-info hide">
+											<h2>SOLAR 1</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage41">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent41">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower41">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 4-2 -->
+										<div id="controllerInfo42" class="inside-info hide">
+											<h2>SOLAR 2</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage42">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent42">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower42">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 4-3 -->
+										<div id="controllerInfo43" class="inside-info hide">
+											<h2>SOLAR 3</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage43">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent43">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower43">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 4-4 -->
+										<div id="controllerInfo44" class="inside-info hide">
+											<h2>SOLAR 4</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage44">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent44">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower44">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+									</div>
+								</div>
+								<!-- SOLAR 5 -->
+								<div class="col-6">
+									<div id="controller5" class="controller">
+										<!-- SOLAR 5 TOTAL -->
+										<div id="controller5Power" class="inside">
+											<div class="img-label"></div>
+											<div class="power">
+												<h1 id="controller5PowerTotal">SOLAR</h1>
+											</div>
+											<div class="img-plus"></div>
+										</div>
+										<!-- SOLAR 5-1 -->
+										<div id="controllerInfo51" class="inside-info hide">
+											<h2>SOLAR 1</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage51">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent51">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower51">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 5-2 -->
+										<div id="controllerInfo52" class="inside-info hide">
+											<h2>SOLAR 2</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage52">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent52">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower52">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 5-3 -->
+										<div id="controllerInfo53" class="inside-info hide">
+											<h2>SOLAR 3</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage53">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent53">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower53">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 5-4 -->
+										<div id="controllerInfo54" class="inside-info hide">
+											<h2>SOLAR 4</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage54">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent54">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower54">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+									</div>
+								</div>
+								<!-- SOLAR 6 -->
+								<div class="col-6">
+									<div id="controller6" class="controller">
+										<!-- SOLAR 6 TOTAL -->
+										<div id="controller6Power" class="inside">
+											<div class="img-label"></div>
+											<div class="power">
+												<h1 id="controller6PowerTotal">SOLAR</h1>
+											</div>
+											<div class="img-plus"></div>
+										</div>
+										<!-- SOLAR 6-1 -->
+										<div id="controllerInfo61" class="inside-info hide">
+											<h2>SOLAR 1</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage61">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent61">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower61">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 6-2 -->
+										<div id="controllerInfo62" class="inside-info hide">
+											<h2>SOLAR 2</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage62">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent62">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower62">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 6-3 -->
+										<div id="controllerInfo63" class="inside-info hide">
+											<h2>SOLAR 3</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage63">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent63">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower63">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 6-4 -->
+										<div id="controllerInfo64" class="inside-info hide">
+											<h2>SOLAR 4</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage64">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent64">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower64">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+									</div>
+								</div>
+								<!-- SOLAR 7 -->
+								<div class="col-6">
+									<div id="controller7" class="controller">
+										<!-- SOLAR 7 TOTAL -->
+										<div id="controller7Power" class="inside">
+											<div class="img-label"></div>
+											<div class="power">
+												<h1 id="controller7PowerTotal">SOLAR</h1>
+											</div>
+											<div class="img-plus"></div>
+										</div>
+										<!-- SOLAR 7-1 -->
+										<div id="controllerInfo71" class="inside-info hide">
+											<h2>SOLAR 1</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage71">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent71">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower71">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 7-2 -->
+										<div id="controllerInfo72" class="inside-info hide">
+											<h2>SOLAR 2</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage72">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent72">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower72">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 7-3 -->
+										<div id="controllerInfo73" class="inside-info hide">
+											<h2>SOLAR 3</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage73">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent73">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower73">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 7-4 -->
+										<div id="controllerInfo74" class="inside-info hide">
+											<h2>SOLAR 4</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage74">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent74">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower74">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+									</div>
+								</div>
+								<!-- SOLAR 8 -->
+								<div class="col-6">
+									<div id="controller8" class="controller">
+										<!-- SOLAR 8 TOTAL -->
+										<div id="controller8Power" class="inside">
+											<div class="img-label"></div>
+											<div class="power">
+												<h1 id="controller8PowerTotal">SOLAR</h1>
+											</div>
+											<div class="img-plus"></div>
+										</div>
+										<!-- SOLAR 8-1 -->
+										<div id="controllerInfo81" class="inside-info hide">
+											<h2>SOLAR 1</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage81">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent81">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower81">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 8-2 -->
+										<div id="controllerInfo82" class="inside-info hide">
+											<h2>SOLAR 2</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage82">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent82">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower82">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 8-3 -->
+										<div id="controllerInfo83" class="inside-info hide">
+											<h2>SOLAR 3</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage83">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent83">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower83">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+										<!-- SOLAR 8-4 -->
+										<div id="controllerInfo84" class="inside-info hide">
+											<h2>SOLAR 4</h2>
+											<div class="divider"></div>
+											<h3><span id="controllerVoltage84">-</span><span class="label">Voltage </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerCurrent84">-</span><span class="label">Current </span></h3>
+											<div class="clear"></div>
+											<h3><span id="controllerPower84">-</span><span class="label">Power </span></h3>
+											<div class="clear"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+		
+			<!-- SOLAR -->
+			<div class="top-left">
+				<!-- CARD -->
+				<div id="solar" class="cardview">
+					<!-- SOLAR TOTAL -->
+					<div id="solarPower" class="inside">
+						<div class="img-label"></div>
+						<div class="power"><h1 id="solarPowerTotal">SOLAR</h1></div>
+						<div class="img-plus"></div>
+					</div>
+					<!-- SOLAR 1 -->
+					<div id="solarInfo1" class="inside-info hide">
+						<h2>SOLAR 1</h2>
+						<div class="divider"></div>
+						<h3><span id="solarVoltage1">-</span><span class="label">Voltage </span></h3>
+						<h3><span id="solarCurrent1">-</span><span class="label">Current </span></h3>
+						<h3><span id="solarPower1">-</span><span class="label">Power </span></h3>
+					</div>
+					<div id="solarInfo2" class="inside-info hide">
+						<h2>SOLAR 2</h2>
+						<div class="divider"></div>
+						<h3><span id="solarVoltage2">-</span><span class="label">Voltage </span></h3>
+						<h3><span id="solarCurrent2">-</span><span class="label">Current </span></h3>
+						<h3><span id="solarPower2">-</span><span class="label">Power </span></h3>
+					</div>
+					<div id="solarInfo3" class="inside-info hide">
+						<h2>SOLAR 3</h2>
+						<div class="divider"></div>
+						<h3><span id="solarVoltage3">-</span><span class="label">Voltage </span></h3>
+						<h3><span id="solarCurrent3">-</span><span class="label">Current </span></h3>
+						<h3><span id="solarPower3">-</span><span class="label">Power </span></h3>
+					</div>
+					<div id="solarInfo4" class="inside-info hide">
+						<h2>SOLAR 4</h2>
+						<div class="divider"></div>
+						<h3><span id="solarVoltage4">-</span><span class="label">Voltage </span></h3>
+						<h3><span id="solarCurrent4">-</span><span class="label">Current </span></h3>
+						<h3><span id="solarPower4">-</span><span class="label">Power </span></h3>
+					</div>
+				</div>
+				<!-- ARROW -->
+				<div class="arrow-line">
+					<div class="line"></div>
+					<div class="arrow arrow-down"></div>
+				</div>
+			</div>
+			
+			<!-- GRID -->
+			<div class="top-right">
+				<!-- CARD -->
+				<div id="grid" class="cardview">
+					<!-- GRID TOTAL -->
+					<div id="gridPower" class="inside">
+						<div class="img-label"></div>
+						<div class="power"><h1 id="gridPowerTotal">GRID</h1></div>
+						<div class="img-plus"></div>
+					</div>
+					<!-- GRID L1 -->
+					<div id="gridInfo1" class="inside-info hide">
+						<h2>GRID L1</h2>
+						<div class="divider mb-1vh"></div>
+						<h3><span id="gridVoltageL1">-</span><span class="label">Voltage </span></h3>
+						<h3><span id="gridPowerL1">-</span><span class="label">Power </span></h3>
+					</div>
+					<!-- GRID L2 -->
+					<div id="gridInfo2" class="inside-info hide">
+						<h2>GRID L2</h2>
+						<div class="divider mb-1vh"></div>
+						<h3><span id="gridVoltageL2">-</span><span class="label">Voltage </span></h3>
+						<h3><span id="gridPowerL2">-</span><span class="label">Power </span></h3>
+					</div>
+					<!-- GRID L3 -->
+					<div id="gridInfo3" class="inside-info hide">
+						<h2>GRID L3</h2>
+						<div class="divider mb-1vh"></div>
+						<h3><span id="gridVoltageL3">-</span><span class="label">Voltage </span></h3>
+						<h3><span id="gridPowerL3">-</span><span class="label">Power </span></h3>
+					</div>
+				</div>
+				<!-- ARROW -->
+				<div class="arrow-line">
+					<div class="line"></div>
+					<div class="arrow arrow-up"></div>
+				</div>
+			</div>
+		
+		</div>
+		
+		<div class="row">
+			
+			<!-- DEVICE -->
+			<div class="middle" id="device">
+				<!-- DEVICE IMAGE -->
+				<div class="device" id="deviceMain">
+					<div class="img-plus"></div>
+				</div>
+				<!-- AUTARKY -->
+				<div id="deviceInfo1" class="device-inside hide">
+					<h2>AUTARKY</h2>
+					<div class="divider"></div>
+					<div id="progressBar"></div>
+				</div>
+				<!-- STATUS (BS ONLY) -->
+				<div id="deviceInfo2" class="device-inside hide">
+					<h2>STATUS</h2>
+					<div class="divider"></div>
+					<h3>PFC <span id="devicePFC">-</span></h3>
+					<h3>Boost <span id="deviceBoost">-</span></h3>
+					<h3>ECO <span id="deviceECO">-</span></h3>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="row">
+		
+			<!-- BATTERY -->
+			<div class="bottom-left">
+				<!-- ARROW -->
+				<div class="arrow-line">
+					<div class="line"></div>
+					<div class="arrow arrow-down"></div>
+				</div>
+				<!-- CARD -->
+				<div id="battery" class="cardview">
+					<!-- BATTERY TOTAL -->
+					<div id="batteryPower" class="inside">
+						<div class="img-label"></div>
+						<div class="power"><h1 id="batteryPowerTotal">BATTERY</h1></div>
+						<div class="img-plus"></div>
+					</div>
+					<!-- BATTERY POS -->
+					<div id="batteryInfo1" class="inside-info hide">
+						<h2>BATTERY +</h2>
+						<div class="divider"></div>
+						<h3><span id="batteryVoltage1">-</span><span class="label">Voltage </span></h3>
+						<h3><span id="batteryCurrent1">-</span><span class="label">Current </span></h3>
+						<h3><span id="batteryCapacity1">-</span><span class="label">Capacity </span></h3>
+					</div>
+					<!-- BATTERY NEG (BS ONLY) -->
+					<div id="batteryInfo2" class="inside-info hide">
+						<h2>BATTERY -</h2>
+						<div class="divider"></div>
+						<h3><span id="batteryVoltage2">-</span><span class="label">Voltage </span></h3>
+						<h3><span id="batteryCurrent2">-</span><span class="label">Current </span></h3>
+						<h3><span id="batteryCapacity2">-</span><span class="label">Capacity </span></h3>
+					</div>
+				</div>
+			</div>
+			
+			<!-- LOAD -->
+			<div class="bottom-right">
+				<!-- ARROW -->
+				<div class="arrow-line">
+					<div class="line"></div>
+					<div class="arrow arrow-down"></div>
+				</div>
+				<!-- CARD -->
+				<div id="load" class="cardview">
+					<!-- LOAD TOTAL -->
+					<div id="loadPower" class="inside">
+						<div class="img-label"></div>
+						<div class="power"><h1 id="loadPowerTotal">LOAD</h1></div>
+						<div class="img-plus"></div>
+					</div>
+					<!-- LOAD L1 -->
+					<div id="loadInfo1" class="inside-info hide">
+						<h2>LOAD L1</h2>
+						<div class="divider mb-1vh"></div>
+						<h3><span id="loadVoltageL1">-</span><span class="label">Voltage</span></h3>
+						<h3><span id="loadPowerL1">-</span><span class="label">Power</span></h3>
+					</div>
+					<!-- LOAD L2 -->
+					<div id="loadInfo2" class="inside-info hide">
+						<h2>LOAD L2</h2>
+						<div class="divider mb-1vh"></div>
+						<h3><span id="loadVoltageL2">-</span><span class="label">Voltage</span></h3>
+						<h3><span id="loadPowerL2">-</span><span class="label">Power</span></h3>
+					</div>
+					<!-- LOAD L3 -->
+					<div id="loadInfo3" class="inside-info hide">
+						<h2>LOAD L3</h2>
+						<div class="divider mb-1vh"></div>
+						<h3><span id="loadVoltageL3">-</span><span class="label">Voltage</span></h3>
+						<h3><span id="loadPowerL3">-</span><span class="label">Power</span></h3>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		<!-- IMPORT JS FILES -->
+		<script src="js/components/jquery.js"></script>
+		<script src="js/components/bootstrap.js"></script>
+		<script src="js/components/progressbar.js"></script>
+		<script src='js/live.js'></script>
+		
+	</body>
+	
+</html>

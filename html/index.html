@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="description" content="The „Live&amp;Smart“ monitoring and controlling tool designed by batterX® is a sophisticated energy management for optimizing production and consumption." />
+		<meta name="author" content="Ivan Gavrilov" />
+		<title>BatterX | Dashboard</title>
+		<link rel="shortcut icon" href="img/x.png">
+		<link rel="stylesheet" href="css/components/fonts.css">
+		<link rel="stylesheet" type="text/css" href="css/components/normalize.css">
+		<link rel="stylesheet" type="text/css" href="css/components/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/components/jasny-bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/index.css">
+	</head>
+	
+	
+	<body>
+		
+		<!-- OVERLAY -->
+		<div class="overlay"></div>
+		
+		<!-- LEFT-SIDE DRAWER -->
+		<div id="slider-left" class="navmenu navmenu-fixed-left offcanvas-port">
+			<div class="wrap">
+				<div class="menu-container text-center">
+					<img src="img/logo-livesmart.svg" class="logo-livesmart">
+					<img src="img/x-lg.png" class="logo" id="logo">
+					<button type="button" id="live"><h4 class="active">LIVE</h4></button>
+					<img src="img/under.png" class="img-under">
+					<button type="button" id="energy"><h4>ENERGY</h4></button>
+					<img src="img/under.png" class="img-under">
+					<button type="button" id="device"><h4>SYSTEM</h4></button>
+					<img src="img/under.png" class="img-under">
+				</div>
+			</div>
+		</div>
+
+		<!-- MAIN VIEW - MIDDLE -->
+		<div id="middle">
+
+			<!-- NAVIGATION BAR -->
+			<div class="navigation row">
+				
+				<!-- HAMBURGER -->
+				<div class="col-2 p-0 m-0">
+					<button type="button" class="navbar-toggle hidden-land" data-toggle="offcanvas" data-target="#slider-left">
+						<img src="img/hamburger.png" class="hamburger">
+					</button>
+				</div>
+				<!-- TITLE -->
+				<div class="col-8 text-center">
+					<img src="img/x-sm.png" class="logo">
+					<h4 class="title" id="title">LIVE</h4>
+					<img src="img/under.png" class="img-under">
+				</div>
+				<!-- NOTIFICATION BUTTON & BADGE -->
+				<div id="btnNotification" class="col-2 m-0 p-0">
+					<img src="img/notification-white.png" class="notification blink">
+					<span class="button-badge blink"></span>
+				</div>
+				
+			</div>
+			
+			<!-- IFRAME -->
+			<iframe src="live.html" id="frame"></iframe>
+
+			<!-- BOTTOM NOTIFICATION BAR -->
+			<div class="notifbar">
+				<div id="notifbar-parent">
+					<img src="img/notification-red.png" id="notifbar-icon" class="notifbar-icon">
+					<h4 id="notifbar-text" style="color:red"></h4>
+				</div>
+			</div>
+			
+		</div>
+		
+		<!-- RIGHT-SIDE DRAWER -->
+		<div id="slider-right" class="navmenu navmenu-fixed-right offcanvas">
+			
+			<!-- TITLE -->
+			<div class="text-center">
+				<img src="img/x-sm.png" class="logo">
+				<h4 class="title">NOTIFICATIONS</h4>
+				<img src="img/under.png" class="img-under">
+			</div>
+			
+			<!-- LAST TIMESTAMP -->
+			<div class="wrap" id="notif-lastupdate">
+				<!-- Set using 'index.js' -->
+			</div>
+			
+			<!-- LIST - ACTIVE WARNINGS -->
+			<div class="wrap" id="notif-active">
+				<div class="warnings">
+					<!-- Set using 'index.js' -->
+				</div>
+			</div>
+			
+			<!-- LIST - NOTIFICATIONS -->
+			<div class="wrap" id="notif-container">
+				<!-- Set using 'index.js' -->
+			</div>
+			
+		</div>
+		
+		<!-- IMPORT JS FILES -->
+		<script src="js/components/jquery.js"></script>
+		<script src="js/components/bootstrap.js"></script>
+		<script src="js/components/moment.js"></script>
+		<script src="js/components/jasny-bootstrap.js"></script>
+		<script src="js/batterx-notifications.js"></script>
+		<script src="js/index.js"></script>
+		
+	</body>
+
+</html>
