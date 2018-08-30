@@ -51,12 +51,14 @@ $('#btnPinToView').on('click', function() {
 	if($('#middle').hasClass('full-view')) {
 		$('#middle').removeClass('full-view');
 		$('#slider-right').addClass('offcanvas');
+		$('#btnPinToView').attr('src', 'img/ic_tack_save.png');
 	} else {
 		$('#middle').addClass('full-view');
 		$('#slider-right').removeClass('offcanvas');
 		$('#slider-right').removeClass('in');
 		$('#slider-right').removeClass('canvas-sliding');
 		$('#slider-right').removeClass('canvas-slid');
+		$('#btnPinToView').attr('src', 'img/ic_tack_save_active.png');
 	}
 });
 
