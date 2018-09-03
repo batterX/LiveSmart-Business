@@ -371,7 +371,7 @@ function mainLoop() {
 				if(json.hasOwnProperty("1554")) solarVoltage2 = round(parseInt(json["1554"][Object.keys(json["1554"])[0]]["entityvalue"])*0.01, 0);
 				if(json.hasOwnProperty("1555")) solarVoltage3 = round(parseInt(json["1555"][Object.keys(json["1555"])[0]]["entityvalue"])*0.01, 0);
 				if(json.hasOwnProperty("1556")) solarVoltage4 = round(parseInt(json["1556"][Object.keys(json["1556"])[0]]["entityvalue"])*0.01, 0);
-				if(solarVoltage1 > 1 || solarVoltage2 > 1 || solarVoltage3 > 1 || solarVoltage4 > 1) 
+				if(solarVoltage1 > 5 || solarVoltage2 > 5 || solarVoltage3 > 5 || solarVoltage4 > 5) 
 					$(".top-left").css("visibility", "visible");
 				else 
 					$(".top-left").css("visibility", "hidden");
@@ -586,7 +586,7 @@ function mainLoop() {
 			if(json.hasOwnProperty("274")) gridVoltageL2 = round(parseInt(json["274"][Object.keys(json["274"])[0]]["entityvalue"])*0.01, 0);
 			if(json.hasOwnProperty("275")) gridVoltageL3 = round(parseInt(json["275"][Object.keys(json["275"])[0]]["entityvalue"])*0.01, 0);
 			
-			if(gridVoltageL1 > 1 || gridVoltageL2 > 1 || gridVoltageL3 > 1) 
+			if(gridVoltageL1 > 5 || gridVoltageL2 > 5 || gridVoltageL3 > 5) 
 				$(".top-right").css("visibility", "visible");
 			else 
 				$(".top-right").css("visibility", "hidden");
@@ -636,7 +636,7 @@ function mainLoop() {
 			if(json.hasOwnProperty("1042")) batteryVoltagePlus = round(parseInt(json["1042"][Object.keys(json["1042"])[0]]["entityvalue"])*0.01, 1);
 			if(json.hasOwnProperty("1041")) batteryVoltageMinus = round(parseInt(json["1041"][Object.keys(json["1041"])[0]]["entityvalue"])*0.01, 1);
 			
-			if(batteryVoltagePlus > 1 || batteryVoltageMinus > 1) 
+			if(batteryVoltagePlus > 5 || batteryVoltageMinus > 5) 
 				$(".bottom-left").css("visibility", "visible");
 			else 
 				$(".bottom-left").css("visibility", "hidden");
@@ -692,7 +692,7 @@ function mainLoop() {
 			if(json.hasOwnProperty("1298")) loadVoltageL2 = round(parseInt(json["1298"][Object.keys(json["1298"])[0]]["entityvalue"])*0.01, 0);
 			if(json.hasOwnProperty("1299")) loadVoltageL3 = round(parseInt(json["1299"][Object.keys(json["1299"])[0]]["entityvalue"])*0.01, 0);
 			
-			if(loadVoltageL1 > 1 || loadVoltageL2 > 1 || loadVoltageL3 > 1) 
+			if(loadVoltageL1 > 5 || loadVoltageL2 > 5 || loadVoltageL3 > 5) 
 				$(".bottom-right").css("visibility", "visible");
 			else 
 				$(".bottom-right").css("visibility", "hidden");
