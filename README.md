@@ -37,6 +37,8 @@ Run the `$ sudo crontab -e` and add the following line in it:
 * * * * * sh /home/pi/launcher.sh >/home/pi/logs/crontab.log 2>&1
 ```
 
+### Configure the App
+
 Wait for 2-3 minutes...
 
 Open the Web-browser and navigate to `http://localhost/phpliteadmin.php`. Login using password `batterx`.
@@ -49,7 +51,8 @@ INSERT INTO "device_info" ("setting","value","mod_timestamp") VALUES ('device_se
 INSERT INTO "device_info" ("setting","value","mod_timestamp") VALUES ('device_model','batterX BS','2017-11-10 13:12:07');
 ```
 
-Finally, reboot the Raspberry Pi:
-```
-$ sudo reboot
-```
+> `Note:` To use the Live&Smart Cloud Monitoring App, your batterX Business UPS has to be registered using its serial number in the batterX Cloud.
+
+### Reboot the Live&Smart
+
+Finally, reboot the Raspberry Pi using `$ sudo reboot` and after 
