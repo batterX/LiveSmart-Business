@@ -1,6 +1,6 @@
 # batterX Live&Smart Business (v18.9.1)
 
-### Install the Live&Smart Monitoring App
+### Install the Monitoring App
 
 Login to your Raspberry Pi using `Remote Desktop Connection` or directly using an HDMI display
 
