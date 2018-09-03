@@ -37,6 +37,18 @@ Run the `$ sudo crontab -e` and add the following line in it:
 * * * * * sh /home/pi/launcher.sh >/home/pi/logs/crontab.log 2>&1
 ```
 
+Wait for 2-3 minutes...
+
+Open the Web-browser and navigate to `http://localhost/phpliteadmin.php`. Login using password `batterx`.
+
+Open the `/srv/bx/usv.db3` database and run the following query.  
+Replace `SERIAL_NUMBER` with the Serial Number of your batterX Business UPS.
+
+```sql
+INSERT INTO "device_info" ("setting","value","mod_timestamp") VALUES ('device_serial_number','SERIAL_NUMBER','2017-11-10 13:12:07');
+INSERT INTO "device_info" ("setting","value","mod_timestamp") VALUES ('device_model','batterX BS','2017-11-10 13:12:07');
+```
+
 Finally, reboot the Raspberry Pi:
 ```
 $ sudo reboot
