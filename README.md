@@ -1,1 +1,1 @@
-# batterX Live&Smart Business (v18.7.10)
+# batterX Live&Smart Business (v18.9.1)
