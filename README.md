@@ -55,4 +55,4 @@ INSERT INTO "device_info" ("setting","value","mod_timestamp") VALUES ('device_mo
 
 ### Reboot the Live&Smart
 
-Finally, reboot the Raspberry Pi using `$ sudo reboot` and after 
+Finally, reboot the Raspberry Pi using the `$ sudo reboot` command and after 5-10 minutes the App sould start working.
