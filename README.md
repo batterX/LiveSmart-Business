@@ -37,7 +37,7 @@ INSERT INTO "device_info" ("setting","value","mod_timestamp") VALUES ('device_se
 INSERT INTO "device_info" ("setting","value","mod_timestamp") VALUES ('device_model','batterX BS',CURRENT_TIMESTAMP);
 ```
 
-> **NOTE:** To use the Live&Smart Cloud Monitoring App, your batterX Business UPS has to be registered using its serial number in the batterX Cloud (Use **./GetApikey** to get the apikey of the Live&Smart).
+> **NOTE:** To use the Live&Smart Cloud Monitoring App, your batterX Business UPS has to be registered using its serial number in the batterX Cloud (Use `./GetApikey` to get the apikey of the Live&Smart).
 
 ### Reboot the Live&Smart
 
