@@ -1,4 +1,4 @@
-# batterX Live&Smart Business (v18.9.1)
+# batterX Live&Smart Business (v18.10.1)
 
 ### Install the Monitoring App
 
