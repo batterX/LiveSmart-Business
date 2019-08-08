@@ -1,4 +1,4 @@
-# batterX Live&Smart Business (v18.10.1)
+# batterX liveX Business (v19.8.1)
 
 ### Install the Monitoring App
 
@@ -23,22 +23,6 @@ Run the `$ sudo crontab -e` and add the following line in it:
 * * * * * sh /home/pi/launcher.sh >/home/pi/logs/crontab.log 2>&1
 ```
 
-### Configure the App
-
-Wait for 2-3 minutes...
-
-Open the Web-browser and navigate to `http://localhost/phpliteadmin.php`. Login using password `batterx`.
-
-Open the `/srv/bx/usv.db3` database and run the following query.  
-Replace `SERIAL_NUMBER` with the Serial Number of your batterX Business UPS.
-
-```sql
-INSERT INTO "device_info" ("setting","value","mod_timestamp") VALUES ('device_serial_number','SERIAL_NUMBER',CURRENT_TIMESTAMP);
-INSERT INTO "device_info" ("setting","value","mod_timestamp") VALUES ('device_model','batterX BS',CURRENT_TIMESTAMP);
-```
-
-> **NOTE:** To use the Live&Smart Cloud Monitoring App, your batterX Business UPS has to be registered using its serial number in the batterX Cloud (Use `./GetApikey` to get the apikey of the Live&Smart).
-
-### Reboot the Live&Smart
+### Reboot the liveX
 
 Finally, reboot the Raspberry Pi using the `$ sudo reboot` command and after 5-10 minutes the App sould start working.
