@@ -30,7 +30,8 @@ sudo chmod 777 /home/pi/logs
 
 sudo kill $(pgrep "CloudStream")
 
-sudo killall BatterN -9
+
+sqlite3 /srv/bx/ram/currentC.db3 "INSERT into CommandsIn (type,entity) values (9,1);"
 
 
 
