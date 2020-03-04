@@ -28,8 +28,11 @@ sudo chmod 777 /home/pi/logs
 
 
 
-sudo kill $(pgrep "CloudStream")
+sudo apt-get install libcurl4-openssl-dev -y
 
+
+
+sudo kill $(pgrep "CloudStream")
 
 sqlite3 /srv/bx/ram/currentC.db3 "INSERT into CommandsIn (type,entity) values (9,1);"
 
