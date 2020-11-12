@@ -1,0 +1,98 @@
+*:not(input):not(select):not(textarea) { user-select: none }
+
+
+
+
+
+body {
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+main {
+	width: 100%;
+	text-align: center;
+	padding: 1rem;
+}
+
+
+
+
+
+#upsUnknown {
+	max-width: 720px;
+	background-color: var(--color-main);
+	text-align: center;
+	padding: 5rem 1rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	border-radius: 0.25rem;
+}
+
+#upsUnknown h1 {
+	font-weight: 400;
+	margin-bottom: 4rem;
+}
+
+#upsUnknown > div {
+	max-width: 35rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#upsUnknown .notif {
+	display: block;
+}
+
+#upsUnknown .message {
+	font-size: 1.5rem;
+	margin-left: 1rem;
+	line-height: 1.1;
+	text-align: left;
+}
+
+
+
+
+
+#upsDetected {
+	max-width: 500px;
+}
+
+#upsDetected h1 {
+	font-size: 3rem;
+	font-weight: 300;
+	margin-top: 1.5rem;
+    margin-bottom: 2.5rem;
+    line-height: 1;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+#upsDetected h1 span.x {
+	color: #92e503;
+}
+#upsDetected h1 span.model {
+    font-size: 2.5rem;
+}
+
+#upsDetected img {
+	display: block;
+	width: 225px;
+	height: 225px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#upsDetected .serialnumber {
+	display: block;
+	font-size: 1.5rem;
+	margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
