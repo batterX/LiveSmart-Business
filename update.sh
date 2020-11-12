@@ -1,17 +1,8 @@
 #!/bin/sh
 # updater.sh
 
-
-
-sudo rm /home/pi/program/BatterN
-sudo cp /home/pi/livesmart-business/program/BatterN /home/pi/program
-sudo chmod 777 /home/pi/program/BatterN
-
-sudo rm /home/pi/program/TestDb
-sudo cp /home/pi/livesmart-business/program/TestDb /home/pi/program
-sudo chmod 777 /home/pi/program/TestDb
-
-
+sudo cp /home/pi/livesmart-business/html /var/www -r
+sudo chmod 777 /var/www -R
 
 sudo rm /home/pi/CloudStream
 sudo cp /home/pi/livesmart-business/CloudStream /home/pi
@@ -25,6 +16,14 @@ sudo chmod 777 /home/pi/updater.sh
 
 sudo mkdir /home/pi/logs
 sudo chmod 777 /home/pi/logs
+
+sudo rm /home/pi/program/BatterN
+sudo cp /home/pi/livesmart-business/program/BatterN /home/pi/program
+sudo chmod 777 /home/pi/program/BatterN
+
+sudo rm /home/pi/program/TestDb
+sudo cp /home/pi/livesmart-business/program/TestDb /home/pi/program
+sudo chmod 777 /home/pi/program/TestDb
 
 
 
