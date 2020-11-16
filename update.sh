@@ -20,10 +20,12 @@ sudo chmod 777 /home/pi/logs
 sudo rm /home/pi/program/BatterN
 sudo cp /home/pi/livesmart-business/program/BatterN /home/pi/program
 sudo chmod 777 /home/pi/program/BatterN
+sudo chown pi /home/pi/program/BatterN
 
 sudo rm /home/pi/program/TestDb
 sudo cp /home/pi/livesmart-business/program/TestDb /home/pi/program
 sudo chmod 777 /home/pi/program/TestDb
+sudo chown pi /home/pi/program/TestDb
 
 
 
