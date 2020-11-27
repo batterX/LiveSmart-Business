@@ -1023,7 +1023,7 @@ function setupOther() {
 
 function setupOther_2() {
 
-	waitToFinish(); return;
+
 
 	// Set Common Parameters
 
@@ -1168,7 +1168,7 @@ function setupCarbon() {
 
 function setupCarbon_2() {
 
-	waitToFinish(); return;
+
 
 	// Set Common Parameters
 
@@ -1418,7 +1418,7 @@ function setupLiFePO_2() {
 
 function setupLiFePO_3() {
 
-	waitToFinish(); return;
+
 
 
 	// Set Common Parameters

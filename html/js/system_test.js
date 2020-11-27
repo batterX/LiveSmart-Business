@@ -1,6 +1,6 @@
 $progress.trigger("step", 6);
 
-window.location.href = "accept_terms.php"; // TODO REMOVE
+
 
 
 
