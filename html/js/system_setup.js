@@ -172,6 +172,48 @@ $("#sysmode_mode").on("change", function() {
 
 
 /*
+	Generator Switch Type Change
+*/
+
+$("#generator_switchOnType").on("change", function() {
+	if($(this).val() == 1) {
+		$("#generator_switchOnTime_container").removeClass("d-none");
+		$("#generator_switchOnVoltage_container").addClass("d-none");
+		$("#generator_switchOnTime").removeAttr("disabled");
+		$("#generator_switchOnVoltage").removeAttr("disabled");
+	} else if($(this).val() == 2) {
+		$("#generator_switchOnTime_container").addClass("d-none");
+		$("#generator_switchOnVoltage_container").removeClass("d-none");
+		$("#generator_switchOnTime").removeAttr("disabled");
+		$("#generator_switchOnVoltage").removeAttr("disabled");
+	} else {
+		$("#generator_switchOnTime").attr("disabled", true);
+		$("#generator_switchOnVoltage").attr("disabled", true);
+	}
+});
+
+$("#generator_switchOffType").on("change", function() {
+	if($(this).val() == 1) {
+		$("#generator_switchOffTime_container").removeClass("d-none");
+		$("#generator_switchOffVoltage_container").addClass("d-none");
+		$("#generator_switchOffTime").removeAttr("disabled");
+		$("#generator_switchOffVoltage").removeAttr("disabled");
+	} else if($(this).val() == 2) {
+		$("#generator_switchOffTime_container").addClass("d-none");
+		$("#generator_switchOffVoltage_container").removeClass("d-none");
+		$("#generator_switchOffTime").removeAttr("disabled");
+		$("#generator_switchOffVoltage").removeAttr("disabled");
+	} else {
+		$("#generator_switchOffTime").attr("disabled", true);
+		$("#generator_switchOffVoltage").attr("disabled", true);
+	}
+});
+
+
+
+
+
+/*
 	Activate Submit Button
 */
 
@@ -226,7 +268,8 @@ setInterval(() => {
 			$("#other_battery_maxChargeC         ").val() != "" &&
 			$("#other_battery_maxDischargeC      ").val() != "" &&
 			$("#other_battery_minDischargeVoltage").val() != "" &&
-			$("#other_battery_voltageHysteresis  ").val() != ""
+			$("#other_battery_voltageHysteresis  ").val() != "" &&
+			$("#other_battery_dischargeCurrent   ").val() != ""
 		) {
 			$("#btn_next").attr("disabled", isSettingParameters);
 		} else {
@@ -337,7 +380,7 @@ function step1() {
 			var maxDischargeC       = null;
 			var minDischargeVoltage = null;
 			var voltageHysteresis   = null;
-
+			var dischargeCurrent    = null;
 			if(response.hasOwnProperty("NominalBattValue") && response["NominalBattValue"].hasOwnProperty("0")) {
 				temp = response["NominalBattValue"]["0"];
 				ah                  = parseInt(temp["v1"]);
@@ -348,12 +391,14 @@ function step1() {
 				temp = response["SystemMode"]["0"];
 				minDischargeVoltage = parseInt(temp["v2"]) / 100;
 				voltageHysteresis   = parseInt(temp["v3"]) / 100;
+				dischargeCurrent    = parseInt(temp["v4"]) / 100;
 			}
 			if(ah                  != null) $("#other_battery_ah                 ").val(ah                 );
 			if(maxChargeC          != null) $("#other_battery_maxChargeC         ").val(maxChargeC         );
 			if(maxDischargeC       != null) $("#other_battery_maxDischargeC      ").val(maxDischargeC      );
 			if(minDischargeVoltage != null) $("#other_battery_minDischargeVoltage").val(minDischargeVoltage);
 			if(voltageHysteresis   != null) $("#other_battery_voltageHysteresis  ").val(voltageHysteresis  );
+			if(dischargeCurrent    != null) $("#other_battery_dischargeCurrent   ").val(dischargeCurrent   );
 
 			// Show System Mode Settings
 			if(response.hasOwnProperty("SystemMode") && response["SystemMode"].hasOwnProperty("0")) {
@@ -415,6 +460,37 @@ function step1() {
 				$("#modbus_extsol_id").val(temp["v1"]);
 			}
 
+			// Show Generator Settings
+			if(response.hasOwnProperty("GeneratorSetGlobal") && response["GeneratorSetGlobal"].hasOwnProperty("0")) {
+				temp = response["GeneratorSetGlobal"]["0"];
+				$("#generator_enable      ").val(temp["mode"] == "2" ? "1": "0");
+				$("#generator_pin         ").val(temp["v1"]);
+				$("#generator_pinOld      ").val(temp["v1"]);
+				$("#generator_currentLimit").val(temp["v2"] != 1 ? "" : Math.round(temp["v3"] / 10) / 10);
+			}
+			if(response.hasOwnProperty("GeneratorSetOn") && response["GeneratorSetOn"].hasOwnProperty("0")) {
+				temp = response["GeneratorSetOn"]["0"];
+				$("#generator_switchOnType   ").val(temp["mode"]).trigger("change");
+				$("#generator_switchOnVoltage").val(Math.round(parseInt(temp["v2"]) / 100));
+				$("#generator_minOnTime      ").val(Math.round(parseInt(temp["v1"]) / 60));
+				var tempHH = Math.floor(parseInt(temp["v2"]) / 3600).toString();
+				var tempMM = Math.floor((parseInt(temp["v2"]) - tempHH * 3600) / 60).toString();
+				if(tempHH.length == 1) tempHH = "0" + tempHH;
+				if(tempMM.length == 1) tempMM = "0" + tempMM;
+				$("#generator_switchOnTime").val(tempHH + ":" + tempMM);
+			}
+			if(response.hasOwnProperty("GeneratorSetOff") && response["GeneratorSetOff"].hasOwnProperty("0")) {
+				temp = response["GeneratorSetOff"]["0"];
+				$("#generator_switchOffType   ").val(temp["mode"]).trigger("change");
+				$("#generator_switchOffVoltage").val(Math.round(parseInt(temp["v2"]) / 100));
+				$("#generator_minOffTime      ").val(Math.round(parseInt(temp["v1"]) / 60));
+				var tempHH = Math.floor(parseInt(temp["v2"]) / 3600).toString();
+				var tempMM = Math.floor((parseInt(temp["v2"]) - tempHH * 3600) / 60).toString();
+				if(tempHH.length == 1) tempHH = "0" + tempHH;
+				if(tempMM.length == 1) tempMM = "0" + tempMM;
+				$("#generator_switchOffTime").val(tempHH + ":" + tempMM);
+			}
+
 			step2();
 			
 		}
@@ -464,6 +540,10 @@ function step2() {
 				// Set Solar Info
 				if(json.hasOwnProperty("solar_info"))
 					$("#solar_info").val(json.solar_info);
+
+				// Set Generator Info
+				if(json.hasOwnProperty("generator_info"))
+					$("#generator_info").val(json.generator_info);
 
 				// Set Installer Memo
 				if(json.hasOwnProperty("note"))
@@ -662,7 +742,8 @@ function mainFormSubmit() {
 			$("#other_battery_maxChargeC         ").val() == "" ||
 			$("#other_battery_maxDischargeC      ").val() == "" ||
 			$("#other_battery_minDischargeVoltage").val() == "" ||
-			$("#other_battery_voltageHysteresis  ").val() == ""
+			$("#other_battery_voltageHysteresis  ").val() == "" ||
+			$("#other_battery_dischargeCurrent   ").val() == ""
 		) return;
 	}
 
@@ -748,6 +829,7 @@ function mainFormSubmit() {
 		#other_battery_maxDischargeC,
 		#other_battery_minDischargeVoltage,
 		#other_battery_voltageHysteresis,
+		#other_battery_dischargeCurrent,
 
 		#sysmode_mode,
 		#sysmode_cutpeak_max,
@@ -755,6 +837,7 @@ function mainFormSubmit() {
 		#sysmode_cutpeak_target,
 		#sysmode_eco,
 		#sysmode_pfc,
+		#btnGenerator,
 
 		#modbus_mode,
 		#modbus_baudrate,
@@ -936,6 +1019,55 @@ function setCommonParameters() {
 
 
 
+	// Set Generator
+
+	if($("#generator_enable").val() == "1") {
+		var switchOnType     = 0; if($("#generator_switchOnType    ").val().trim() != "") switchOnType     = parseFloat($("#generator_switchOnType    ").val().trim());
+		var minOnTime        = 0; if($("#generator_minOnTime       ").val().trim() != "") minOnTime        = parseFloat($("#generator_minOnTime       ").val().trim());
+		var switchOnVoltage  = 0; if($("#generator_switchOnVoltage ").val().trim() != "") switchOnVoltage  = parseFloat($("#generator_switchOnVoltage ").val().trim());
+		var switchOffType    = 0; if($("#generator_switchOffType   ").val().trim() != "") switchOffType    = parseFloat($("#generator_switchOffType   ").val().trim());
+		var minOffTime       = 0; if($("#generator_minOffTime      ").val().trim() != "") minOffTime       = parseFloat($("#generator_minOffTime      ").val().trim());
+		var switchOffVoltage = 0; if($("#generator_switchOffVoltage").val().trim() != "") switchOffVoltage = parseFloat($("#generator_switchOffVoltage").val().trim());
+		var pin              = 0; if($("#generator_pin             ").val().trim() != "") pin              = parseFloat($("#generator_pin             ").val().trim());
+		var pinOld           = 0; if($("#generator_pinOld          ").val().trim() != "") pinOld           = parseFloat($("#generator_pinOld          ").val().trim());
+		var currentLimit     = 0; if($("#generator_currentLimit    ").val().trim() != "") currentLimit     = parseFloat($("#generator_currentLimit    ").val().trim());
+		var switchOnTime     = 0; if($("#generator_switchOnTime    ").val().trim() != "") { var tempOnTime  = $("#generator_switchOnTime ").val().trim().split(":"); switchOnTime  = parseInt(tempOnTime [0]) * 3600 + parseInt(tempOnTime [1]) * 60; }
+		var switchOffTime    = 0; if($("#generator_switchOffTime   ").val().trim() != "") { var tempOffTime = $("#generator_switchOffTime").val().trim().split(":"); switchOffTime = parseInt(tempOffTime[0]) * 3600 + parseInt(tempOffTime[1]) * 60; }
+		minOnTime        = Math.round(minOnTime        *  60);
+		switchOnVoltage  = Math.round(switchOnVoltage  * 100);
+		minOffTime       = Math.round(minOffTime       *  60);
+		switchOffVoltage = Math.round(switchOffVoltage * 100);
+		currentLimit     = Math.round(currentLimit     * 100);
+		setSetting("GeneratorSetGlobal", "0", "mode", "2");
+		setSetting("GeneratorSetGlobal", "0", "v1"  , pin);
+		setSetting("GeneratorSetGlobal", "0", "v2"  , currentLimit > 0 ? 1 : 0);
+		setSetting("GeneratorSetGlobal", "0", "v3"  , currentLimit);
+		setSetting("GeneratorSetOn"    , "0", "mode", switchOnType);
+		setSetting("GeneratorSetOn"    , "0", "v1"  , minOnTime);
+		setSetting("GeneratorSetOn"    , "0", "v2"  , switchOnType == 2 ? switchOnVoltage : switchOnTime);
+		setSetting("GeneratorSetOn"    , "0", "v3"  , "30");
+		setSetting("GeneratorSetOff"   , "0", "mode", switchOffType);
+		setSetting("GeneratorSetOff"   , "0", "v1"  , minOffTime);
+		setSetting("GeneratorSetOff"   , "0", "v2"  , switchOffType == 2 ? switchOffVoltage : switchOffTime);
+		setSetting("GeneratorSetOff"   , "0", "v3"  , "30");
+		if(pin != pinOld) {
+			if(pinOld != "0") {
+				setSetting("BxOutPin", pinOld, "mode", "0");
+				setSetting("BxOutPin", pinOld, "v5"  , "0");
+				setSetting("BxOutPin", pinOld, "s2"  , "" );
+			}
+			if(pin != "0") {
+				setSetting("BxOutPin", pin, "mode", "1");
+				setSetting("BxOutPin", pin, "v5"  , "1");
+				setSetting("BxOutPin", pin, "s2"  , "GeneratorSetGlobal");
+			}
+		}
+	} else {
+		setSetting("GeneratorSetGlobal", "0", "mode", "0");
+	}
+
+
+
 }
 
 
@@ -983,7 +1115,9 @@ function setupOther() {
 		solar_info        : $("#solar_info").val(),
 
 		battery_type      : "other",
-		battery_capacity  : parseInt($("#other_battery_ah").val()) * 720
+		battery_capacity  : parseInt($("#other_battery_ah").val()) * 720,
+
+		generator_info    : $("#generator_info").val()
 
 	}
 
@@ -1038,7 +1172,7 @@ function setupOther_2() {
 	var batteryMaxDischargeC       = Math.round(parseFloat($("#other_battery_maxDischargeC      ").val()) * 100);
 	var batteryMinDischargeVoltage = Math.round(parseFloat($("#other_battery_minDischargeVoltage").val()) * 100);
 	var batteryVoltageHysteresis   = Math.round(parseFloat($("#other_battery_voltageHysteresis  ").val()) * 100);
-	var batteryDischargeCurrent    = Math.round(batteryAh * batteryMaxDischargeC * 0.40);
+	var batteryDischargeCurrent    = Math.round(parseFloat($("#other_battery_dischargeCurrent   ").val()) * 100);
 	var batteryChargeCurrent       = Math.round(batteryAh * batteryMaxChargeC);
 	var redischargingVoltage       = Math.round(batteryMinDischargeVoltage + batteryVoltageHysteresis);
 
@@ -1128,7 +1262,9 @@ function setupCarbon() {
 		battery_type      : "carbon",
 		battery_capacity  : $("#carbon_battery_capacity").val().split(" ")[0],
 		battery_model     : $("#carbon_battery_model").val(),
-		battery_strings   : $("#carbon_battery_strings").val()
+		battery_strings   : $("#carbon_battery_strings").val(),
+
+		generator_info    : $("#generator_info").val()
 
 	}
 
@@ -1190,8 +1326,8 @@ function setupCarbon_2() {
 	setSetting("NominalBattValue", "0", "v3"  , "100"                  ); // Battery Max Discharge C (1.00C)
 	setSetting("NominalBattValue", "0", "v4"  , "-10"                  ); // Battery Start Charge Current (-0.1A Keep Disharging)
 	setSetting("SystemMode"      , "0", "v1"  , batteryChargeCurrent   ); // Charge Current (?)
-	setSetting("SystemMode"      , "0", "v2"  , "35000"                ); // Min Discharge Voltage (350V = 11.66V/Bat)
-	setSetting("SystemMode"      , "0", "v3"  , "5500"                 ); // Min Discharge Voltage Hysteresis (350+55 = 405V @ 13.50V/Bat)
+	setSetting("SystemMode"      , "0", "v2"  , "35500"                ); // Min Discharge Voltage (355V = 11.83V/Bat)
+	setSetting("SystemMode"      , "0", "v3"  , "5000"                 ); // Min Discharge Voltage Hysteresis (355+50 = 405V @ 13.50V/Bat)
 	setSetting("SystemMode"      , "0", "v4"  , batteryDischargeCurrent); // Discharge Current (Auto-Discharge Mode)
 	setSetting("WinterCharge"    , "0", "v1"  , batteryChargeCurrent   ); // Winter Charge Current (Ah * chargeC)
 	setSetting("WinterCharge"    , "0", "v4"  , "40500"                ); // End Winter Charge Voltage (Redischarging Voltage)
@@ -1363,7 +1499,10 @@ function setupLiFePO_2() {
 		solar_wattPeak    : $("#solar_total_power").val(),
 		solar_info        : $("#solar_info").val(),
 
-		battery_type      : "lifepo"
+		battery_type      : "lifepo",
+
+		generator_info    : $("#generator_info").val()
+		
 	}
 
 	if($("#solar_c1_serial").val() != "" && $("#solar_c1_power").val() != "") { tempData["solar_c1_serial"] = $("#solar_c1_serial").val(); tempData["solar_c1_power"] = $("#solar_c1_power").val(); }
@@ -1435,18 +1574,18 @@ function setupLiFePO_3() {
 	var batteryStrings          = Math.round(totalBatteries / 22);
 	var batteryAh               = Math.round(148 * batteryStrings);
 	var batteryDischargeCurrent = Math.round(batteryAh * 0.5 * 100);
-	var batteryChargeCurrent    = Math.round(batteryAh * 0.5 * 100);
+	var batteryChargeCurrent    = Math.round(batteryAh * 0.2 * 100);
 
 	setSetting("NominalBattType"  , "0", "mode", "4"                        ); // Battery Type (4=LiFePO)
 	setSetting("NominalBattType"  , "0", "v1"  , "3200"                     ); // One Battery Voltage (32V)
 	setSetting("NominalBattType"  , "0", "v2"  , "11"                       ); // Battery Count N -> VDC+ (11)
 	setSetting("NominalBattValue" , "0", "v1"  , batteryAh                  ); // Battery Total Capacity Ah
 	setSetting("NominalBattValue" , "0", "v2"  , "50"                       ); // Battery Max Charge C (0.5C)
-	setSetting("NominalBattValue" , "0", "v3"  , "100"                      ); // Battery Max Discharge C (1.00C)
+	setSetting("NominalBattValue" , "0", "v3"  , "50"                       ); // Battery Max Discharge C (0.5C)
 	setSetting("NominalBattValue" , "0", "v4"  , "-10"                      ); // Battery Start Charge Current (-0.1A Keep Disharging)
 	setSetting("SystemMode"       , "0", "v1"  , batteryChargeCurrent       ); // Charge Current (?)
-	setSetting("SystemMode"       , "0", "v2"  , "35000"                    ); // Min Discharge Voltage (350V = 31.8V/Bat)
-	setSetting("SystemMode"       , "0", "v3"  , "2000"                     ); // Min Discharge Voltage Hysteresis (350+20 = 370V @ 33.6V/Bat)
+	setSetting("SystemMode"       , "0", "v2"  , "34000"                    ); // Min Discharge Voltage (340V = 30.91V/Bat)
+	setSetting("SystemMode"       , "0", "v3"  , "2500"                     ); // Min Discharge Voltage Hysteresis (340+25 = 365V @ 33.18V/Bat)
 	setSetting("SystemMode"       , "0", "v4"  , batteryDischargeCurrent    ); // Discharge Current (Auto-Discharge Mode)
 	setSetting("WinterCharge"     , "0", "v1"  , batteryChargeCurrent       ); // Winter Charge Current (Ah * chargeC)
 	setSetting("WinterCharge"     , "0", "v4"  , "37000"                    ); // End Winter Charge Voltage (Redischarging Voltage)
@@ -1455,7 +1594,7 @@ function setupLiFePO_3() {
 	setSetting("BattModbusConnect", "0", "mode", "1"                        ); // Activate Battery Modbus
 	setSetting("BattModbusConnect", "0", "s1"  , $("#lifepo_portname").val()); // Set Battery Modbus Port
 
-	sendCommand("20481", "0", "35000", ""); // Set Discharge Limit (UPS Side)
+	sendCommand("20481", "0", "34000", ""); // Set Discharge Limit (UPS Side)
 
 
 

@@ -4,24 +4,126 @@ $progress.trigger("step", 8);
 
 
 
-$("#checkboxAccept1, #checkboxAccept2").on("click", () => {
-	if($("#checkboxAccept1").is(":checked") && $("#checkboxAccept2").is(":checked"))
-		$("#btnFinish").css("visibility", "visible");
-	else
-		$("#btnFinish").css("visibility", "hidden");
+var pdfData;
+
+
+
+
+
+$.get({
+	url: "api.php?get=settings",
+	error: () => { alert("Error! Please refresh the page!") },
+	success: (response) => {
+		
+		if(!response || typeof response != "object") return alert("Error! Please refresh the page!");
+
+		var temp = {};
+
+		var systemMode          = "";
+		var autoPfcOff          = "";
+		var autoEcoMode         = "";
+		var maxChargeC          = "";
+		var maxDischargeC       = "";
+		var minDischargeVoltage = "";
+		var voltageHysteresis   = "";
+		var dischargeCurrent    = "";
+
+		if(response.hasOwnProperty("NominalBattValue") && response["NominalBattValue"].hasOwnProperty("0")) {
+			temp = response["NominalBattValue"]["0"];
+			maxChargeC    = (parseInt(temp["v2"]) / 100).toFixed(2);
+			maxDischargeC = (parseInt(temp["v3"]) / 100).toFixed(2);
+		}
+		if(response.hasOwnProperty("SystemMode") && response["SystemMode"].hasOwnProperty("0")) {
+			temp = response["SystemMode"]["0"];
+			minDischargeVoltage = (parseInt(temp["v2"]) / 100) + " V";
+			voltageHysteresis   = (parseInt(temp["v3"]) / 100) + " V";
+			dischargeCurrent    = (parseInt(temp["v4"]) / 100) + " A";
+			systemMode          = lang.dict_bs_sysmode[temp["mode"]];
+		}
+		if(response.hasOwnProperty("EcoMode") && response["EcoMode"].hasOwnProperty("0")) {
+			temp = response["EcoMode"]["0"];
+			autoEcoMode = temp["v1"] == "0" ? lang.common.off : ("ECO " + temp["v1"]);
+		}
+		if(response.hasOwnProperty("PfcSet") && response["PfcSet"].hasOwnProperty("0")) {
+			temp = response["PfcSet"]["0"];
+			autoPfcOff = temp["v1"] == "1" ? lang.common.yes : lang.common.no;
+		}
+
+		$("#systemConfig_systemMode         ").html(systemMode         );
+		$("#systemConfig_autoPfcOff         ").html(autoPfcOff         );
+		$("#systemConfig_autoEcoMode        ").html(autoEcoMode        );
+		$("#systemConfig_maxChargeC         ").html(maxChargeC         );
+		$("#systemConfig_maxDischargeC      ").html(maxDischargeC      );
+		$("#systemConfig_minDischargeVoltage").html(minDischargeVoltage);
+		$("#systemConfig_voltageHysteresis  ").html(voltageHysteresis  );
+		$("#systemConfig_dischargeCurrent   ").html(dischargeCurrent   );
+		$(".system-config").removeClass("d-none");
+
+		var enable               = "";
+		var pin                  = "";
+		var limitChargingCurrent = "";
+		var switchOnWhen         = "";
+		var minOnTime            = "";
+		var switchOffWhen        = "";
+		var minOffTime           = "";
+
+		if(response.hasOwnProperty("GeneratorSetGlobal") && response["GeneratorSetGlobal"].hasOwnProperty("0")) {
+			temp = response["GeneratorSetGlobal"]["0"];
+			enable               = temp["mode"] == "2" ? lang.common.yes : lang.common.no;
+			pin                  = lang.bs_system_setup.generator_output_pin + " " + temp["v1"];
+			limitChargingCurrent = temp["v2"] != 1 ? "" : (Math.round(temp["v3"] / 10) / 10) + " A";
+			if(temp["mode"] == "2") $(".generator").removeClass("d-none");
+		}
+		if(response.hasOwnProperty("GeneratorSetOn") && response["GeneratorSetOn"].hasOwnProperty("0")) {
+			temp = response["GeneratorSetOn"]["0"];
+			var tempVoltage = Math.round(parseInt(temp["v2"]) / 100) + " V";
+			var tempHH = Math.floor(parseInt(temp["v2"]) / 3600).toString();
+			var tempMM = Math.floor((parseInt(temp["v2"]) - tempHH * 3600) / 60).toString();
+			if(tempHH.length == 1) tempHH = "0" + tempHH;
+			if(tempMM.length == 1) tempMM = "0" + tempMM;
+			var tempTime = tempHH + ":" + tempMM;
+			if(temp["mode"] == "1" || temp["mode"] == "2") {
+				switchOnWhen  = temp["mode"] == "1" ? lang.bs_system_setup.generator_time : lang.bs_system_setup.generator_battery_voltage;
+				switchOnWhen += "<br>" + (temp["mode"] == "1" ? tempTime : tempVoltage);
+			}
+			minOnTime = Math.round(parseInt(temp["v1"]) / 60) + " min";
+		}
+		if(response.hasOwnProperty("GeneratorSetOff") && response["GeneratorSetOff"].hasOwnProperty("0")) {
+			temp = response["GeneratorSetOff"]["0"];
+			var tempVoltage = Math.round(parseInt(temp["v2"]) / 100) + " V";
+			var tempHH = Math.floor(parseInt(temp["v2"]) / 3600).toString();
+			var tempMM = Math.floor((parseInt(temp["v2"]) - tempHH * 3600) / 60).toString();
+			if(tempHH.length == 1) tempHH = "0" + tempHH;
+			if(tempMM.length == 1) tempMM = "0" + tempMM;
+			var tempTime = tempHH + ":" + tempMM;
+			if(temp["mode"] == "1" || temp["mode"] == "2") {
+				switchOffWhen  = temp["mode"] == "1" ? lang.bs_system_setup.generator_time : lang.bs_system_setup.generator_battery_voltage;
+				switchOffWhen += "<br>" + (temp["mode"] == "1" ? tempTime : tempVoltage);
+			}
+			minOffTime = Math.round(parseInt(temp["v1"]) / 60) + " min";
+		}
+
+		$("#generator_enable              ").html(enable              );
+		$("#generator_pin                 ").html(pin                 );
+		$("#generator_limitChargingCurrent").html(limitChargingCurrent);
+		$("#generator_switchOnWhen        ").html(switchOnWhen        );
+		$("#generator_minOnTime           ").html(minOnTime           );
+		$("#generator_switchOffWhen       ").html(switchOffWhen       );
+		$("#generator_minOffTime          ").html(minOffTime          );
+		
+	}
 });
 
 
 
 
 
-function getImageDimensions(file) {
-	return new Promise (function (resolved, rejected) {
-		var i = new Image();
-		i.onload = function() { resolved({ w: i.width, h: i.height }) };
-		i.src = file;
-	});
-}
+$("#checkboxAccept1, #checkboxAccept2").on("click", () => {
+	if($("#checkboxAccept1").is(":checked") && $("#checkboxAccept2").is(":checked"))
+		$("#btnFinish").css("visibility", "visible");
+	else
+		$("#btnFinish").css("visibility", "hidden");
+});
 
 
 
@@ -94,6 +196,8 @@ $("#btnFinishInstallation").on("click", () => {
 	if(dataObj.hasOwnProperty("box_serial"          ) && dataObj["box_serial"          ] != "") data.append("box_serial"          , dataObj["box_serial"          ]);
 	if(dataObj.hasOwnProperty("software_version"    ) && dataObj["software_version"    ] != "") data.append("software_version"    , dataObj["software_version"    ]);
 
+	if(dataObj.hasOwnProperty("generator_info"      ) && dataObj["generator_info"      ] != "") data.append("generator_info"      , dataObj["generator_info"      ]);
+
 	if(dataObj.hasOwnProperty("battery_type")) {
 		if(dataObj["battery_type"] == "lifepo") {
 			if(dataObj.hasOwnProperty("battery_type"         ) && dataObj["battery_type"         ] != "") data.append("battery_type"         , dataObj["battery_type"         ]);
@@ -113,46 +217,65 @@ $("#btnFinishInstallation").on("click", () => {
 
 	$("#confirmLoadCorrect").removeClass("d-none");
 
-	html2canvas(document.querySelector("#summary"), {
+	html2canvas(document.querySelector("#summary1"), {
 		windowWidth: 1200,
 		scale: 2
-	}).then(async canvas => {
+	}).then(async canvas1 => {
 
-		var img = canvas.toDataURL("image/jpeg");
-		var dimensions = await getImageDimensions(img);
+		pdfData = new jsPDF("portrait", "mm", "a4");
 
-		var ratio = dimensions.w / dimensions.h;
-		var w = 190, h = 190 / ratio;
-		if(ratio < 0.68) { h = 277; w = 277 * ratio; }
+		var img1 = canvas1.toDataURL("image/jpeg");
+		var dimensions1 = await getImageDimensions(img1);
 
-		var pdf = new jsPDF("portrait", "mm", "a4");
-		pdf.addImage(img, "JPEG", (210 - w) / 2, (297 - h) / 2, w, h); // img, type, x, y, width, height
-		var pdfBlob = pdf.output("blob");
+		var ratio1 = dimensions1.w / dimensions1.h;
+		var w1 = 190, h1 = 190 / ratio1;
+		if(ratio1 < 0.68) { h1 = 277; w1 = 277 * ratio1; }
 
-		// HIDE FIELD AFTER CREATION
+		pdfData.addImage(img1, "JPEG", (210 - w1) / 2, 15, w1, h1); // img, type, x, y, width, height
 
-		$("#confirmLoadCorrect").addClass("d-none");
+		html2canvas(document.querySelector("#summary2"), {
+			windowWidth: 1200,
+			scale: 2
+		}).then(async canvas2 => {
 
-		// USE BLOB TO SAVE PDF-FILE TO CLOUD
+			var img2 = canvas2.toDataURL("image/jpeg");
+			var dimensions2 = await getImageDimensions(img2);
 
-		data.append("pdf_file", pdfBlob, lang.bs_summary.installation_summary);
+			var ratio2 = dimensions2.w / dimensions2.h;
+			var w2 = 190, h2 = 190 / ratio2;
+			if(ratio2 < 0.68) { h2 = 277; w2 = 277 * ratio2; }
 
-		$.post({
-			url: "https://api.batterx.io/v3/install_bs.php",
-			data: data,
-			processData: false,
-			contentType: false,
-			cache: false,
-			error: () => { alert("Error, please try again!"); },
-			success: (response) => {
-				if(response == "1") {
-					showSuccess();
-					$("#confirmLoadCorrect").removeClass("d-none");
-				} else {
-					$("#btnFinishInstallation").removeAttr("disabled");
-					alert("Error: " + response);
+			pdfData.addPage();
+			pdfData.addImage(img2, "JPEG", (210 - w2) / 2, 15, w2, h2); // img, type, x, y, width, height
+
+			var pdfBlob = pdfData.output("blob");
+
+			// HIDE FIELD AFTER CREATION
+
+			$("#confirmLoadCorrect").addClass("d-none");
+
+			// USE BLOB TO SAVE PDF-FILE TO CLOUD
+
+			data.append("pdf_file", pdfBlob, lang.bs_summary.installation_summary);
+
+			$.post({
+				url: "https://api.batterx.io/v3/install_bs.php",
+				data: data,
+				processData: false,
+				contentType: false,
+				cache: false,
+				error: () => { alert("Error, please try again!"); },
+				success: (response) => {
+					if(response == "1") {
+						showSuccess();
+						$("#confirmLoadCorrect").removeClass("d-none");
+					} else {
+						$("#btnFinishInstallation").removeAttr("disabled");
+						alert("Error: " + response);
+					}
 				}
-			}
+			});
+
 		});
 
 	});
@@ -164,7 +287,8 @@ $("#btnFinishInstallation").on("click", () => {
 
 
 function showSuccess() {
-	$("#summary   ").hide();
+	$("#summary1  ").hide();
+	$("#summary2  ").hide();
 	$("#confirm   ").hide();
 	$("#btnFinish ").hide();
 	$("#successBox").show();
@@ -176,21 +300,20 @@ function showSuccess() {
 
 
 $("#btnDownload").on("click", function() {
-	html2canvas(document.querySelector("#summary"), {
-		windowWidth: 1200,
-		scale: 2,
-		onclone: (clonedDoc) => { clonedDoc.getElementById("summary").style.display = "block"; }
-	}).then(async canvas => {
-		var img = canvas.toDataURL("image/jpeg");
-		var dimensions = await getImageDimensions(img);
-		var ratio = dimensions.w / dimensions.h;
-		var w = 190, h = 190 / ratio;
-		if(ratio < 0.68) { h = 277; w = 277 * ratio; }
-		var pdf = new jsPDF("portrait", "mm", "a4");
-		pdf.addImage(img, "JPEG", (210 - w) / 2, (297 - h) / 2, w, h); // img, type, x, y, width, height
-		pdf.save(lang.bs_summary.installation_summary + ".pdf");
-	});
+	pdfData.save(lang.bs_summary.installation_summary + ".pdf");
 });
+
+
+
+
+
+function getImageDimensions(file) {
+	return new Promise (function (resolved, rejected) {
+		var i = new Image();
+		i.onload = function() { resolved({ w: i.width, h: i.height }) };
+		i.src = file;
+	});
+}
 
 
 

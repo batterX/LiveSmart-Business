@@ -142,6 +142,130 @@ $_SESSION["box_apikey"] = $apikey;
 			</div>
 		</div>
 
+		<div class="modal fade" id="modalGenerator" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-dialog-centered modal-sm">
+				<div class="modal-content">
+					<h5 class="modal-header mb-0"><?php echo $lang["bs_system_setup"]["generator_setup"] ?></h5>
+					<div class="modal-body">
+
+						<div class="form-group row mb-2">
+							<label class="col-6 col-form-label col-form-label-sm"><?php echo $lang["bs_system_setup"]["generator_enable"] ?></label>
+							<div class="col-6 d-flex align-items-center">
+								<select id="generator_enable" class="form-control form-control-sm form-control-outline">
+									<option value="1"><?php echo $lang["common"]["yes"]; ?></option>
+									<option value="0"><?php echo $lang["common"]["no"]; ?></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row mb-2">
+							<label class="col-6 col-form-label col-form-label-sm"><?php echo $lang["bs_system_setup"]["generator_pin"] ?></label>
+							<div class="col-6 d-flex align-items-center">
+								<select id="generator_pin" class="form-control form-control-sm form-control-outline">
+									<option value="0"><?php echo $lang["bs_system_setup"]["generator_none"] ?></option>
+                            		<option value="1"><?php echo $lang["bs_system_setup"]["generator_output_pin"] ?> 1</option>
+                            		<option value="2"><?php echo $lang["bs_system_setup"]["generator_output_pin"] ?> 2</option>
+                            		<option value="3"><?php echo $lang["bs_system_setup"]["generator_output_pin"] ?> 3</option>
+                            		<option value="4"><?php echo $lang["bs_system_setup"]["generator_output_pin"] ?> 4</option>
+                            		<option value="5"><?php echo $lang["bs_system_setup"]["generator_output_pin"] ?> 5</option>
+                            		<option value="6"><?php echo $lang["bs_system_setup"]["generator_output_pin"] ?> 6</option>
+                            		<option value="7"><?php echo $lang["bs_system_setup"]["generator_output_pin"] ?> 7</option>
+                            		<option value="8"><?php echo $lang["bs_system_setup"]["generator_output_pin"] ?> 8</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-6 col-form-label col-form-label-sm"><?php echo $lang["bs_system_setup"]["generator_limit_charging_current"] ?></label>
+							<div class="col-6 d-flex align-items-center">
+								<div class="input-group input-group-sm">
+									<input id="generator_currentLimit" class="form-control form-control-outline" type="number" step="0.1" min="0">
+									<div class="input-group-append"><span class="input-group-text">A</span></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group row mb-1 border-top pt-3">
+							<label class="col-6 col-form-label col-form-label-sm"><?php echo $lang["bs_system_setup"]["generator_switch_on_when"] ?></label>
+							<div class="col-6 d-flex align-items-center">
+								<select id="generator_switchOnType" class="form-control form-control-sm form-control-outline">
+                                    <option value="0"></option>
+                                    <option value="1"><?php echo $lang["bs_system_setup"]["generator_time"] ?></option>
+                                    <option value="2"><?php echo $lang["bs_system_setup"]["generator_battery_voltage"] ?></option>
+                                </select>
+							</div>
+						</div>
+						<div class="form-group row mb-2 d-none" id="generator_switchOnTime_container">
+							<label class="col-6 col-form-label col-form-label-sm p-0"></label>
+							<div class="col-6 d-flex align-items-center">
+								<input id="generator_switchOnTime" type="time" class="form-control form-control-sm form-control-outline" placeholder="" step="60" value="">
+							</div>
+						</div>
+						<div class="form-group row mb-2" id="generator_switchOnVoltage_container">
+							<label class="col-6 col-form-label col-form-label-sm p-0"></label>
+							<div class="col-6 d-flex align-items-center">
+								<div class="input-group input-group-sm">
+									<input id="generator_switchOnVoltage" class="form-control form-control-outline" type="number" step="1" min="0">
+									<div class="input-group-append"><span class="input-group-text">V</span></div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-6 col-form-label col-form-label-sm"><?php echo $lang["bs_system_setup"]["generator_min_on_time"] ?></label>
+							<div class="col-6 d-flex align-items-center">
+								<div class="input-group input-group-sm">
+									<input id="generator_minOnTime" class="form-control form-control-outline" type="number" step="1" min="0">
+									<div class="input-group-append"><span class="input-group-text">min</span></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group row mb-1 border-top pt-3">
+							<label class="col-6 col-form-label col-form-label-sm"><?php echo $lang["bs_system_setup"]["generator_switch_off_when"] ?></label>
+							<div class="col-6 d-flex align-items-center">
+								<select id="generator_switchOffType" class="form-control form-control-sm form-control-outline">
+                                    <option value="0"></option>
+                                    <option value="1"><?php echo $lang["bs_system_setup"]["generator_time"] ?></option>
+                                    <option value="2"><?php echo $lang["bs_system_setup"]["generator_battery_voltage"] ?></option>
+                                </select>
+							</div>
+						</div>
+						<div class="form-group row mb-2 d-none" id="generator_switchOffTime_container">
+							<label class="col-6 col-form-label col-form-label-sm p-0"></label>
+							<div class="col-6 d-flex align-items-center">
+								<input id="generator_switchOffTime" type="time" class="form-control form-control-sm form-control-outline" placeholder="" step="60" value="">
+							</div>
+						</div>
+						<div class="form-group row mb-2" id="generator_switchOffVoltage_container">
+							<label class="col-6 col-form-label col-form-label-sm p-0"></label>
+							<div class="col-6 d-flex align-items-center">
+								<div class="input-group input-group-sm">
+									<input id="generator_switchOffVoltage" class="form-control form-control-outline" type="number" step="1" min="0">
+									<div class="input-group-append"><span class="input-group-text">V</span></div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-6 col-form-label col-form-label-sm"><?php echo $lang["bs_system_setup"]["generator_min_off_time"] ?></label>
+							<div class="col-6 d-flex align-items-center">
+								<div class="input-group input-group-sm">
+									<input id="generator_minOffTime" class="form-control form-control-outline" type="number" step="1" min="0">
+									<div class="input-group-append"><span class="input-group-text">min</span></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="mx-n3 px-3 border-top pt-3">
+							<label><?php echo $lang["bs_system_setup"]["generator_info"] ?></label>
+							<textarea id="generator_info" class="form-control form-control-outline" placeholder="Type here…"></textarea>
+						</div>
+
+						<input id="generator_pinOld" class="form-control form-control-outline" type="hidden">
+						
+					</div>
+					<div class="modal-footer"><button type="button" class="btn btn-sm px-4 py-2 btn-success ripple" data-dismiss="modal"><b><?php echo $lang["btn"]["save"] ?></b></button></div>
+				</div>
+			</div>
+		</div>
+
 
 
 
@@ -228,14 +352,14 @@ $_SESSION["box_apikey"] = $apikey;
 							</div>
 							<div class="card-body pt-3">
 								<label for="solar_info"><?php echo $lang["bs_system_setup"]["solar_info"]; ?></label>
-								<textarea id="solar_info" class="form-control form-control-outline" placeholder="Paneltyp: ...
+								<textarea id="solar_info" class="form-control form-control-outline" placeholder="Paneltyp: …
 
 MPPT 1
-	String 1: ...
-	String 2: ...
+	String 1: …
+	String 2: …
 MPPT 2
-	String 1: ...
-	String 2: ..."></textarea>
+	String 1: …
+	String 2: …"></textarea>
 							</div>
 						</div>
 
@@ -273,11 +397,11 @@ MPPT 2
 										<textarea id="lifepo_bms" class="form-control form-control-outline" style="min-height: 80px !important" placeholder="PPTBB0xxxxxxxxxx
 PPTBP0xxxxxxxxxx
 PPTBP0xxxxxxxxxx
-..."></textarea>
+…"></textarea>
 										<label class="mt-3" for="lifepo_serialnumbers"><?php echo $lang["bs_system_setup"]["batteries_lifepo_sn_battery_modules"]; ?></label>
 										<textarea id="lifepo_serialnumbers" class="form-control form-control-outline" placeholder="PPTBP1xxxxxxxxxx
 PPTBP1xxxxxxxxxx
-..."></textarea>
+…"></textarea>
 									</div>
 									<div class="card-body border-bottom" style="margin-left:-1.25rem;margin-right:-1.25rem">
 										<label><?php echo $lang["bs_system_setup"]["modbus_port_name"]; ?></label>
@@ -347,6 +471,11 @@ PPTBP1xxxxxxxxxx
 										<input id="other_battery_voltageHysteresis" type="number" step="1" class="form-control form-control-outline p-1" style="width:30%;max-width:30%;height:calc(1.5em + 0.25rem + 2px);font-size:0.8rem">
 										<span class="d-inline-block pl-2" style="width:10%;min-width:10%"><small>V</small></span>
 									</div>
+									<div class="mt-2 d-flex justify-content-between align-items-center">
+										<span class="d-inline-block pr-2 flex-grow-1"><small><?php echo $lang["bs_system_setup"]["batteries_other_discharge_current"] ?></small></span>
+										<input id="other_battery_dischargeCurrent" type="number" step="0.1" class="form-control form-control-outline p-1" style="width:30%;max-width:30%;height:calc(1.5em + 0.25rem + 2px);font-size:0.8rem">
+										<span class="d-inline-block pl-2" style="width:10%;min-width:10%"><small>A</small></span>
+									</div>
 								</div>
 
 							</div>
@@ -409,12 +538,15 @@ PPTBP1xxxxxxxxxx
 									<option value="3">ECO 3</option>
 								</select>
 							</div>
-							<div class="card-body">
+							<div class="card-body border-bottom">
 								<label for="sysmode_pfc"><?php echo $lang["bs_system_setup"]["sysmode_auto_pfc_off"]; ?></label>
 								<select id="sysmode_pfc" class="form-control form-control-outline">
 									<option value="1"><?php echo $lang["common"]["yes"]; ?></option>
 									<option value="0"><?php echo $lang["common"]["no"]; ?></option>
 								</select>
+							</div>
+							<div class="card-body p-2">
+								<button id="btnGenerator" type="button" class="btn btn-custom btn-block ripple p-2" data-toggle="modal" data-target="#modalGenerator"><small><b><?php echo $lang["bs_system_setup"]["generator_setup"] ?></b></small></button>
 							</div>
 						</div>
 

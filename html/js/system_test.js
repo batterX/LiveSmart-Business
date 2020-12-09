@@ -186,7 +186,7 @@ function testEnergyMeter() {
 					if(hasUpsInput  && !response["2913"].hasOwnProperty("4")) allCorrect = false;
 					if(hasUpsOutput && !response["2913"].hasOwnProperty("1")) allCorrect = false;
 					if(hasGrid      && !response["2913"].hasOwnProperty("0")) allCorrect = false;
-					if(hasExtSolar  && !response["2913"].hasOwnProperty("0")) allCorrect = false;
+					if(hasExtSolar  && !response["2913"].hasOwnProperty("3")) allCorrect = false;
 				} else allCorrect = false;
 				if(allCorrect) {
 					$("#testEnergyMeter .notif").addClass("success");
@@ -379,7 +379,7 @@ function testBatteryCharging_test() {
 			batteryCharging_count += 1;
 			$("#log p:last-child").html(`${lang.system_test.performing_test} (${batteryCharging_count} / 5)`);
 
-			if(batteryPower > 500) { // Charging with over 500W
+			if(batteryPower > 250) { // Charging with over 250W
 				if(batteryCharging_count < 5)
 					setTimeout(testBatteryCharging_test, 5000);
 				else {

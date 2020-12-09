@@ -65,7 +65,7 @@ if($batteryType == "other" && $_SESSION["battery_capacity"] == "0") $batteryType
 
 
 
-		<div id="summary" class="mt-5 mx-auto">
+		<div id="summary1" class="summary mt-5 mx-auto">
 
 			<div class="head border box-margin">
 				<div class="title br">
@@ -263,6 +263,88 @@ if($batteryType == "other" && $_SESSION["battery_capacity"] == "0") $batteryType
 				<div class="box-row">
 					<span class="w-100 text-justify"><?php echo $lang["bs_summary"]["confirm_load_final"]; ?></span>
 				</div>
+			</div>
+
+		</div>
+
+		<div id="summary2" class="summary mt-4 mx-auto">
+
+			<div class="system-config border box-margin d-none">
+				<div class="box-head">
+					<span><?php echo $lang["bs_system_setup"]["system_configuration"]; ?></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["sysmode"]; ?></span>
+					<span id="systemConfig_systemMode"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["sysmode_auto_pfc_off"]; ?></span>
+					<span id="systemConfig_autoPfcOff"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["sysmode_auto_eco_mode"]; ?></span>
+					<span id="systemConfig_autoEcoMode"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["batteries_other_max_charge_c"]; ?></span>
+					<span id="systemConfig_maxChargeC"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["batteries_other_max_discharge_c"]; ?></span>
+					<span id="systemConfig_maxDischargeC"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["batteries_other_min_discharge_voltage"]; ?></span>
+					<span id="systemConfig_minDischargeVoltage"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["batteries_other_voltage_hysteresis"]; ?></span>
+					<span id="systemConfig_voltageHysteresis"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["batteries_other_discharge_current"]; ?></span>
+					<span id="systemConfig_dischargeCurrent"></span>
+				</div>
+			</div>
+
+			<div class="generator border box-margin d-none">
+				<div class="box-head">
+					<span><?php echo $lang["bs_system_setup"]["generator_setup"]; ?></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["generator_enable"]; ?></span>
+					<span id="generator_enable"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["generator_pin"]; ?></span>
+					<span id="generator_pin"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["generator_limit_charging_current"]; ?></span>
+					<span id="generator_limitChargingCurrent"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["generator_switch_on_when"]; ?></span>
+					<span id="generator_switchOnWhen"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["generator_min_on_time"]; ?></span>
+					<span id="generator_minOnTime"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["generator_switch_off_when"]; ?></span>
+					<span id="generator_switchOffWhen"></span>
+				</div>
+				<div class="box-row bt">
+					<span class="br"><?php echo $lang["bs_system_setup"]["generator_min_off_time"]; ?></span>
+					<span id="generator_minOffTime"></span>
+				</div>
+				<?php if(!empty($_SESSION["generator_info"])): ?>
+					<div class="box-row bt">
+						<span class="br"><?php echo $lang["bs_system_setup"]["generator_info"]; ?></span>
+						<span style="white-space: pre-wrap"><?php echo $_SESSION["generator_info"]; ?></span>
+					</div>
+				<?php endif; ?>
 			</div>
 
 		</div>
