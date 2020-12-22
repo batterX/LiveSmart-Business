@@ -133,7 +133,7 @@ $("#btnFinishInstallation").on("click", () => {
 
 	$("#btnFinishInstallation").attr("disabled", "disabled");
 
-	deviceModel = "batterX bs";
+	deviceModel = "batterX UPS";
 
 	var data = new FormData();
 
