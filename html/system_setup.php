@@ -58,6 +58,7 @@ $_SESSION["box_apikey"] = $apikey;
 		<!-- Progress Bar -->
 		<div id="progress" class="shadow-lg">
 			<div><div class="progress"><div class="progress-bar progress-bar-striped bg-success progress-bar-animated"></div></div></div>
+			<div data-toggle="modal" data-target="#modalSkipSetup" style="position:absolute;width:1rem;height:1rem;z-index:100;bottom:0;left:0"></div>
 			<div><button id="btn_next" class="btn btn-success ripple" type="submit" form="mainForm" disabled><?php echo $lang["btn"]["continue"]; ?></button></div>
 		</div>
 		<!-- Progress Bar -->
@@ -66,6 +67,16 @@ $_SESSION["box_apikey"] = $apikey;
 
 
 
+		<div class="modal fade" id="modalSkipSetup" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-dialog-centered modal-sm">
+				<div class="modal-content">
+					<div class="modal-body text-center p-0">
+						<input type="password" class="form-control form-control-outline border-0 text-center p-4" value="">
+					</div>
+				</div>
+			</div>
+		</div>
+		
 		<div class="modal fade" id="errorBoxNotRegistered" tabindex="-1" role="dialog">
 			<div class="modal-dialog modal-dialog-centered modal-sm">
 				<div class="modal-content">
@@ -138,6 +149,19 @@ $_SESSION["box_apikey"] = $apikey;
 					<h5 class="modal-header mb-0"><?php echo $lang["bs_system_setup"]["system_installer_memo"]; ?></h5>
 					<div class="modal-body"><textarea id="installer_memo" class="form-control form-control-outline"></textarea></div>
 					<div class="modal-footer"><button type="button" class="btn btn-sm px-4 py-2 btn-success ripple" data-dismiss="modal"><b><?php echo $lang["btn"]["save"] ?></b></button></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="modalConfirmOtherBatteries" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-dialog-centered modal-sm">
+				<div class="modal-content">
+					<h5 class="modal-header mb-0"><?php echo $lang["bs_system_setup"]["otherbatteriesconfirm_title"] ?></h5>
+					<div class="modal-body">
+						<p class="mb-3"><?php echo $lang["bs_system_setup"]["otherbatteriesconfirm_message1"] ?></p>
+						<p class="mb-0" style="color:red"><?php echo $lang["bs_system_setup"]["otherbatteriesconfirm_message2"] ?></p>
+					</div>
+					<div class="modal-footer"><button type="button" class="btn btn-sm px-4 py-2 btn-success ripple" style="min-width:50%"><b><?php echo $lang["bs_system_setup"]["otherbatteriesconfirm_confirm"] ?></b></button></div>
 				</div>
 			</div>
 		</div>

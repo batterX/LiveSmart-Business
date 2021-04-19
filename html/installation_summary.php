@@ -193,8 +193,8 @@ if($batteryType == "other" && $_SESSION["battery_capacity"] == "0") $batteryType
 										if($i == 0) { // At Start
                                             $tempArrFinal[] = $tempArr[$i];
                                         } else if($i == count($tempArr) - 1) {
-											$tempNumToCompare = intval(substr($tempArr[$i], 7));
-                                            if($tempLastNum + 1 != $tempNumToCompare) {
+											$tempNumToCompare = intval(substr($tempArr[$i], 11));
+											if($tempLastNum + 1 != $tempNumToCompare) {
 												if(substr($tempArrFinal[count($tempArrFinal) - 1], -3) != substr($tempLastNum, -3))
 	                                                $tempArrFinal[count($tempArrFinal) - 1] .= "-" . substr($tempLastNum, -3);
                                                 $tempArrFinal[] = $tempArr[$i];
@@ -202,14 +202,14 @@ if($batteryType == "other" && $_SESSION["battery_capacity"] == "0") $batteryType
 												$tempArrFinal[count($tempArrFinal) - 1] .= "-" . substr($tempArr[$i], -3);
 											}
 										} else {
-                                            $tempNumToCompare = intval(substr($tempArr[$i], 7));
+                                            $tempNumToCompare = intval(substr($tempArr[$i], 11));
                                             if($tempLastNum + 1 != $tempNumToCompare) {
 												if(substr($tempArrFinal[count($tempArrFinal) - 1], -3) != substr($tempLastNum, -3))
 	                                                $tempArrFinal[count($tempArrFinal) - 1] .= "-" . substr($tempLastNum, -3);
                                                 $tempArrFinal[] = $tempArr[$i];
                                             }
                                         }
-                                        $tempLastNum = intval(substr($tempArr[$i], 7));
+                                        $tempLastNum = intval(substr($tempArr[$i], 11));
 									}
                                     $finalStr .= implode("<br>", $tempArrFinal);
                                 }
@@ -232,20 +232,17 @@ if($batteryType == "other" && $_SESSION["battery_capacity"] == "0") $batteryType
 					<span class="br"><?php echo $lang["bs_summary"]["installation_solar_controllers"]; ?></span>
 					<span>
                         <?php
-                            if(isset($_SESSION["solar_c1_serial"])) echo     "" . $_SESSION["solar_c1_serial"] . " (" . (isset($_SESSION["solar_c1_power"]) ? $_SESSION["solar_c1_power"] . " Wp" : "") . ")";
-                            if(isset($_SESSION["solar_c2_serial"])) echo "<br>" . $_SESSION["solar_c2_serial"] . " (" . (isset($_SESSION["solar_c2_power"]) ? $_SESSION["solar_c2_power"] . " Wp" : "") . ")";
-                            if(isset($_SESSION["solar_c3_serial"])) echo "<br>" . $_SESSION["solar_c3_serial"] . " (" . (isset($_SESSION["solar_c3_power"]) ? $_SESSION["solar_c3_power"] . " Wp" : "") . ")";
-                            if(isset($_SESSION["solar_c4_serial"])) echo "<br>" . $_SESSION["solar_c4_serial"] . " (" . (isset($_SESSION["solar_c4_power"]) ? $_SESSION["solar_c4_power"] . " Wp" : "") . ")";
-                            if(isset($_SESSION["solar_c5_serial"])) echo "<br>" . $_SESSION["solar_c5_serial"] . " (" . (isset($_SESSION["solar_c5_power"]) ? $_SESSION["solar_c5_power"] . " Wp" : "") . ")";
-                            if(isset($_SESSION["solar_c6_serial"])) echo "<br>" . $_SESSION["solar_c6_serial"] . " (" . (isset($_SESSION["solar_c6_power"]) ? $_SESSION["solar_c6_power"] . " Wp" : "") . ")";
-                            if(isset($_SESSION["solar_c7_serial"])) echo "<br>" . $_SESSION["solar_c7_serial"] . " (" . (isset($_SESSION["solar_c7_power"]) ? $_SESSION["solar_c7_power"] . " Wp" : "") . ")";
-                            if(isset($_SESSION["solar_c8_serial"])) echo "<br>" . $_SESSION["solar_c8_serial"] . " (" . (isset($_SESSION["solar_c8_power"]) ? $_SESSION["solar_c8_power"] . " Wp" : "") . ")";
+							$tempArrSn = explode(",", $_SESSION["solar_controllers_serialnumbers"]);
+							$tempArrWp = explode(",", $_SESSION["solar_controllers_wattpeak"]);
+							$tempArrFinal = (array) [];
+							for($x = 0; $x < count($tempArrSn); $x++) $tempArrFinal[] = $tempArrSn[$x] . " (" . $tempArrWp[$x] . " Wp)";
+							echo implode("<br>", $tempArrFinal);
                         ?>
                     </span>
 				</div>
                 <div class="box-row bt">
 					<span class="br"><?php echo $lang["bs_summary"]["installation_solar_size"]; ?></span>
-					<span><?php echo $_SESSION["solar_wattPeak"] . " Wp"; ?></span>
+					<span><?php echo $_SESSION["solar_wattpeak"] . " Wp"; ?></span>
 				</div>
                 <?php if(!empty($_SESSION["solar_info"])): ?>
 					<div class="box-row bt">

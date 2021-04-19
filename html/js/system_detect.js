@@ -10,7 +10,9 @@ step1();
 
 
 
-// Get CurrentState (Verify if UPS is working)
+// Get CurrentState (Verify if inverter is working)
+
+var previousLogtime = null;
 
 function step1() {
 
@@ -26,6 +28,8 @@ function step1() {
 			var curtime   = moment.utc().subtract(1, "minute").format("YYYY-MM-DD hh:mm:ss");
 			var isWorking = moment(json["logtime"]).isAfter(moment(curtime));
 			if(!isWorking) {
+				if(previousLogtime == null) previousLogtime = json["logtime"];
+				else if(previousLogtime != json["logtime"]) alert("Error! PC or liveX time/timezone not set correctly.");
 				setTimeout(step1, 5000);
 				return;
 			}
@@ -45,7 +49,7 @@ function step1() {
 function step2() {
 
 	$.post({
-		url: "https://api.batterx.io/v3/install_bs.php",
+		url: "https://api.batterx.io/v3/install.php",
 		data: {
 			action: "get_box_serial",
 			apikey: apikey

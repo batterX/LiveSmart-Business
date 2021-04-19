@@ -16,6 +16,8 @@ if($_SESSION["last_step"] != $step && $_SESSION["last_step"] != $step - 1)
 $_SESSION["back_url" ] = $_SERVER["REQUEST_URI"];
 $_SESSION["last_step"] = $step;
 
+$noBattery = (!isset($_SESSION["battery_type"]) || ($_SESSION["battery_type"] == "other" && $_SESSION["battery_capacity"] == "0")) ? true : false;
+
 ?>
 
 
@@ -73,12 +75,12 @@ $_SESSION["last_step"] = $step;
 								<span><?php echo $lang["system_test"]["energy_meter"]; ?></span>
 							</div>
 
-							<div id="testBatteryCharging" class="status d-flex align-items-center mt-4">
+							<div id="testBatteryCharging" class="status d-flex align-items-center mt-4" <?php echo $noBattery ? "style='display:none !important'" : "" ?>>
 								<div class="notif"></div>
 								<span><?php echo $lang["system_test"]["battery_charging"]; ?><span></span></span>
 							</div>
 
-							<div id="testUpsMode" class="status d-flex align-items-center mt-4">
+							<div id="testUpsMode" class="status d-flex align-items-center mt-4" <?php echo $noBattery ? "style='display:none !important'" : "" ?>>
 								<div class="notif"></div>
 								<span><?php echo $lang["system_test"]["ups_mode"]; ?><span></span></span>
 							</div>
@@ -100,7 +102,7 @@ $_SESSION["last_step"] = $step;
 		<script src="js/dist/bundle.js?v=<?php echo $versionHash ?>"></script>
 		<script src="js/common.js?v=<?php echo $versionHash ?>"></script>
 		<script>const lang = <?php echo json_encode($lang) ?>;</script>
-		<script>const noBattery = <?php echo ($_SESSION["battery_type"] == "other" && $_SESSION["battery_capacity"] == "0") ? "true" : "false" ?>;</script>
+		<script>const noBattery = <?php echo $noBattery ? "true" : "false" ?>;</script>
 		<script src="js/system_test.js?v=<?php echo $versionHash ?>"></script>
 
 
