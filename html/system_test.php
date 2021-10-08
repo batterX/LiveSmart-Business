@@ -17,6 +17,7 @@ $_SESSION["back_url" ] = $_SERVER["REQUEST_URI"];
 $_SESSION["last_step"] = $step;
 
 $noBattery = (!isset($_SESSION["battery_type"]) || ($_SESSION["battery_type"] == "other" && $_SESSION["battery_capacity"] == "0")) ? true : false;
+$batteryType = isset($_SESSION["battery_type"]) ? $_SESSION["battery_type"] : "other";
 
 ?>
 
@@ -103,6 +104,7 @@ $noBattery = (!isset($_SESSION["battery_type"]) || ($_SESSION["battery_type"] ==
 		<script src="js/common.js?v=<?php echo $versionHash ?>"></script>
 		<script>const lang = <?php echo json_encode($lang) ?>;</script>
 		<script>const noBattery = <?php echo $noBattery ? "true" : "false" ?>;</script>
+		<script>const batteryType = "<?php echo $batteryType ?>";</script>
 		<script src="js/system_test.js?v=<?php echo $versionHash ?>"></script>
 
 

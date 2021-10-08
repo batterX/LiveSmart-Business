@@ -26,12 +26,19 @@ var skipEnergyMeteryTest = false;
 var batteryCharging_firstRun = true;
 var batteryCharging_count = 0; // run 5 times (5sec delay), then finish
 var batteryCharging_datetime = "";
+var batteryCharging_alreadyCharged = false;
 var batteryMinLevel = 20;
 var batteryMaxLevel = 95;
+var batteryMinVoltage = 350;
+var batteryMaxVoltage = 395;
 var batteryWaitCounter = 0;
 
 var upsMode_firstRun = true;
 var upsMode_count = 0; // run 5 times (5sec delay), then finish
+
+function isLiFePO () { return batteryType == "lifepo"; }
+function isCarbon () { return batteryType == "carbon"; }
+function isOther  () { return batteryType == "other" ; }
 
 
 
@@ -251,10 +258,19 @@ function testBatteryCharging() {
 			if(response.hasOwnProperty("1074") && response["1074"].hasOwnProperty("1"))
 				batteryLevel = parseInt(response["1074"]["1"]);
 
+			var batteryVoltage = 0;
+			if(response.hasOwnProperty("1042") && response["1042"].hasOwnProperty("1"))
+				batteryVoltage = Math.round(parseInt(response["1042"]["1"]) / 100);
+
 			// Charge Battery
-			if(batteryLevel < batteryMinLevel) {
-				$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.verifying_battery_soc} (${batteryLevel}%)`);
-				$("#log").append(`<p>${lang.system_test.charging_battery_to} ${batteryMinLevel}%</p>`);
+			if(!batteryCharging_alreadyCharged && (isLiFePO() && batteryLevel < batteryMinLevel || batteryVoltage < batteryMinVoltage)) {
+				if(isLiFePO()) {
+					$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.verifying_battery_soc} (${batteryLevel}%)`);
+					$("#log").append(`<p>${lang.system_test.charging_battery_to} ${batteryMinLevel}%</p>`);
+				} else {
+					$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.verifying_battery_soc} (${batteryVoltage}V)`);
+					$("#log").append(`<p>${lang.system_test.charging_battery_to} ${batteryMinVoltage}V</p>`);
+				}
 				$.get({
 					url: "api.php?set=command&type=20480&entity=0&text1=500&text2=0",
 					error: () => { alert("E008. Please refresh the page!"); },
@@ -267,9 +283,14 @@ function testBatteryCharging() {
 				});
 			}
 			// Discharge Battery
-			else if(batteryLevel > batteryMaxLevel) {
-				$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.verifying_battery_soc} (${batteryLevel}%)`);
-				$("#log").append(`<p>${lang.system_test.discharging_battery_to} ${batteryMaxLevel}%</p>`);
+			else if(!batteryCharging_alreadyCharged && (isLiFePO() && batteryLevel > batteryMaxLevel || batteryVoltage > batteryMaxVoltage)) {
+				if(isLiFePO()) {
+					$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.verifying_battery_soc} (${batteryLevel}%)`);
+					$("#log").append(`<p>${lang.system_test.discharging_battery_to} ${batteryMaxLevel}%</p>`);
+				} else {
+					$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.verifying_battery_soc} (${batteryVoltage}V)`);
+					$("#log").append(`<p>${lang.system_test.discharging_battery_to} ${batteryMaxVoltage}V</p>`);
+				}
 				$.get({
 					url: "api.php?set=command&type=20480&entity=0&text1=-500&text2=0",
 					error: () => { alert("E010. Please refresh the page!"); },
@@ -283,8 +304,13 @@ function testBatteryCharging() {
 			}
 			// Continue Testing
 			else {
-				$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.verifying_battery_soc} (${batteryLevel}%)`);
-				$("#log").append(`<p>${lang.system_test.enable_ac_charging}</p>`);
+				if(isLiFePO()) {
+					$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.verifying_battery_soc} (${batteryLevel}%)`);
+					$("#log").append(`<p>${lang.system_test.enable_ac_charging}</p>`);
+				} else {
+					$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.verifying_battery_soc} (${batteryVoltage}V)`);
+					$("#log").append(`<p>${lang.system_test.enable_ac_charging}</p>`);
+				}
 				$.get({
 					url: "api.php?set=command&type=20480&entity=0&text1=500&text2=0",
 					error: () => { alert("E014. Please refresh the page!"); },
@@ -318,14 +344,28 @@ function testBatteryCharging_waitUntilCharged() {
 			if(!response || typeof response != "object") return alert("E017. Please refresh the page!");
 			if(!response.hasOwnProperty("1121") || !response["1121"].hasOwnProperty("1")) return alert("E018. Please refresh the page!");
 			if(!response.hasOwnProperty("1074") || !response["1074"].hasOwnProperty("1")) return alert("E019. Please refresh the page!");
+			if(!response.hasOwnProperty("1042") || !response["1042"].hasOwnProperty("1")) return alert("E020. Please refresh the page!");
 
-			if(batteryWaitCounter < 1 && response["1074"]["1"] >= batteryMinLevel) {
-				$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.charging_battery_to} ${batteryMinLevel}%`);
-				testBatteryCharging();
+			if(isLiFePO()) {
+				if(batteryWaitCounter < 1 && response["1074"]["1"] >= batteryMinLevel) {
+					$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.charging_battery_to} ${batteryMinLevel}%`);
+					batteryCharging_alreadyCharged = true;
+					testBatteryCharging();
+				} else {
+					batteryWaitCounter -= 1;
+					$("#log p:last-child").html(`${lang.system_test.charging_battery_to} ${batteryMinLevel}%<br>${lang.system_test.current_status}: ${response["1074"]["1"]}% / ${response["1121"]["1"]}W`);
+					setTimeout(testBatteryCharging_waitUntilCharged, 5000);
+				}
 			} else {
-				batteryWaitCounter -= 1;
-				$("#log p:last-child").html(`${lang.system_test.charging_battery_to} ${batteryMinLevel}%<br>${lang.system_test.current_status}: ${response["1074"]["1"]}% / ${response["1121"]["1"]}W`);
-				setTimeout(testBatteryCharging_waitUntilCharged, 5000);
+				if(batteryWaitCounter < 1 && Math.round(parseInt(response["1042"]["1"]) / 100) >= batteryMinVoltage) {
+					$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.charging_battery_to} ${batteryMinVoltage}V`);
+					batteryCharging_alreadyCharged = true;
+					testBatteryCharging();
+				} else {
+					batteryWaitCounter -= 1;
+					$("#log p:last-child").html(`${lang.system_test.charging_battery_to} ${batteryMinVoltage}V<br>${lang.system_test.current_status}: ${Math.round(parseInt(response["1042"]["1"]) / 100)}V / ${response["1121"]["1"]}W`);
+					setTimeout(testBatteryCharging_waitUntilCharged, 5000);
+				}
 			}
 
 		}
@@ -345,17 +385,31 @@ function testBatteryCharging_waitUntilDischarged() {
 			if(!response || typeof response != "object") return alert("E023. Please refresh the page!");
 			if(!response.hasOwnProperty("1121") || !response["1121"].hasOwnProperty("1")) return alert("E024. Please refresh the page!");
 			if(!response.hasOwnProperty("1074") || !response["1074"].hasOwnProperty("1")) return alert("E025. Please refresh the page!");
+			if(!response.hasOwnProperty("1042") || !response["1042"].hasOwnProperty("1")) return alert("E026. Please refresh the page!");
 			if(!response.hasOwnProperty("1634") || !response["1634"].hasOwnProperty("0")) return alert("E027. Please refresh the page!");
 
-			if(batteryWaitCounter < 1 && response["1074"]["1"] <= batteryMaxLevel) {
-				$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.discharging_battery_to} ${batteryMaxLevel}%`);
-				$("#testBatteryCharging span span").html("");
-				testBatteryCharging();
+			if(isLiFePO()) {
+				if(batteryWaitCounter < 1 && response["1074"]["1"] <= batteryMaxLevel) {
+					$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.discharging_battery_to} ${batteryMaxLevel}%`);
+					$("#testBatteryCharging span span").html("");
+					testBatteryCharging();
+				} else {
+					batteryWaitCounter -= 1;
+					$("#log p:last-child").html(`${lang.system_test.discharging_battery_to} ${batteryMaxLevel}%<br>${lang.system_test.current_status}: ${response["1074"]["1"]}% / ${response["1121"]["1"]}W`);
+					$("#testBatteryCharging span span").html(parseInt(response["1634"]["0"]) > 100 ? lang.system_test.turn_solar_off : "");
+					setTimeout(testBatteryCharging_waitUntilDischarged, 5000);
+				}
 			} else {
-				batteryWaitCounter -= 1;
-				$("#log p:last-child").html(`${lang.system_test.discharging_battery_to} ${batteryMaxLevel}%<br>${lang.system_test.current_status}: ${response["1074"]["1"]}% / ${response["1121"]["1"]}W`);
-				$("#testBatteryCharging span span").html(parseInt(response["1634"]["0"]) > 100 ? lang.system_test.turn_solar_off : "");
-				setTimeout(testBatteryCharging_waitUntilDischarged, 5000);
+				if(batteryWaitCounter < 1 && Math.round(parseInt(response["1042"]["1"]) / 100) <= batteryMaxVoltage) {
+					$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.discharging_battery_to} ${batteryMaxVoltage}V`);
+					$("#testBatteryCharging span span").html("");
+					testBatteryCharging();
+				} else {
+					batteryWaitCounter -= 1;
+					$("#log p:last-child").html(`${lang.system_test.discharging_battery_to} ${batteryMaxVoltage}V<br>${lang.system_test.current_status}: ${Math.round(parseInt(response["1042"]["1"]) / 100)}V / ${response["1121"]["1"]}W`);
+					$("#testBatteryCharging span span").html(parseInt(response["1634"]["0"]) > 100 ? lang.system_test.turn_solar_off : "");
+					setTimeout(testBatteryCharging_waitUntilDischarged, 5000);
+				}
 			}
 
 		}

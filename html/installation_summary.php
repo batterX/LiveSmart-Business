@@ -228,22 +228,24 @@ if($batteryType == "other" && $_SESSION["battery_capacity"] == "0") $batteryType
 						<span><?php echo $_SESSION["battery_capacity"] . " Wh"; ?></span>
 					</div>
                 <?php endif; ?>
-                <div class="box-row bt">
-					<span class="br"><?php echo $lang["bs_summary"]["installation_solar_controllers"]; ?></span>
-					<span>
-                        <?php
-							$tempArrSn = explode(",", $_SESSION["solar_controllers_serialnumbers"]);
-							$tempArrWp = explode(",", $_SESSION["solar_controllers_wattpeak"]);
-							$tempArrFinal = (array) [];
-							for($x = 0; $x < count($tempArrSn); $x++) $tempArrFinal[] = $tempArrSn[$x] . " (" . $tempArrWp[$x] . " Wp)";
-							echo implode("<br>", $tempArrFinal);
-                        ?>
-                    </span>
-				</div>
-                <div class="box-row bt">
-					<span class="br"><?php echo $lang["bs_summary"]["installation_solar_size"]; ?></span>
-					<span><?php echo $_SESSION["solar_wattpeak"] . " Wp"; ?></span>
-				</div>
+				<?php if(!empty($_SESSION["solar_controllers_serialnumbers"])): ?>
+					<div class="box-row bt">
+						<span class="br"><?php echo $lang["bs_summary"]["installation_solar_controllers"]; ?></span>
+						<span>
+							<?php
+								$tempArrSn = explode(",", $_SESSION["solar_controllers_serialnumbers"]);
+								$tempArrWp = explode(",", $_SESSION["solar_controllers_wattpeak"]);
+								$tempArrFinal = (array) [];
+								for($x = 0; $x < count($tempArrSn); $x++) $tempArrFinal[] = $tempArrSn[$x] . " (" . $tempArrWp[$x] . " Wp)";
+								echo implode("<br>", $tempArrFinal);
+							?>
+						</span>
+					</div>
+					<div class="box-row bt">
+						<span class="br"><?php echo $lang["bs_summary"]["installation_solar_size"]; ?></span>
+						<span><?php echo $_SESSION["solar_wattpeak"] . " Wp"; ?></span>
+					</div>
+				<?php endif; ?>
                 <?php if(!empty($_SESSION["solar_info"])): ?>
 					<div class="box-row bt">
 						<span class="br"><?php echo $lang["bs_summary"]["installation_solar_info"]; ?></span>

@@ -118,11 +118,10 @@ function allFieldsCorrect() {
 		var countSlave     = 0;
 		var countBatteries = 0;
 		$("#lifepo_bms").val().trim().split("\n").forEach(sn => {
-				 if(sn.trim().startsWith("PPTBB0")) countMaster    += 1;
-			else if(sn.trim().startsWith("PPTBP0")) countSlave     += 1;
+			if(sn.trim() != "") { if(sn.trim().startsWith("PPTBB0")) countMaster += 1; else countSlave += 1; }
 		});
 		$("#lifepo_serialnumbers").val().trim().split("\n").forEach(sn => {
-				 if(sn.trim().startsWith("PPTBP1")) countBatteries += 1;
+			if(sn.trim() != "") countBatteries += 1;
 		});
 		if($("#lifepo_portname").val() == "") return false;
 		if(countMaster != 1 || countSlave < 2 || countBatteries < 22) return false;
@@ -240,13 +239,14 @@ function verifySolarControllers() {
 				data: {
 					action: "verify_controller",
 					system: system_serial,
-					serialnumber: sn },
+					serialnumber: sn.trim()
+				},
 				error: () => { alert("E008. Please refresh the page!"); },
 				success: (response) => {
 					if(response === "1") {
 						canContinue = true;
 					} else {
-						$("#errorControllerSerial").val(sn);
+						$("#errorControllerSerial").val(sn.trim());
 						$("#errorControllerNotExistOrWithOtherSystem").modal("show");
 					}
 				}
@@ -277,11 +277,10 @@ function verifyModulesLiFePO() {
 	var slaveBMS  = [];
 	var batteries = [];
 	$("#lifepo_bms").val().trim().split("\n").forEach(sn => {
-			 if(sn.trim().startsWith("PPTBB0")) masterBMS = sn;
-		else if(sn.trim().startsWith("PPTBP0")) slaveBMS.push(sn);
+		if(sn.trim() != "") { if(sn.trim().startsWith("PPTBB0")) masterBMS = sn.trim(); else slaveBMS.push(sn.trim()); }
 	});
 	$("#lifepo_serialnumbers").val().trim().split("\n").forEach(sn => {
-			 if(sn.trim().startsWith("PPTBP1")) batteries.push(sn);
+		if(sn.trim() != "") batteries.push(sn.trim());
 	});
 
 	var canContinue = true;
@@ -294,13 +293,14 @@ function verifyModulesLiFePO() {
 				data: {
 					action: "verify_battery",
 					system: system_serial,
-					serialnumber: sn },
+					serialnumber: sn.trim()
+				},
 				error: () => { alert("E008. Please refresh the page!"); },
 				success: (response) => {
 					if(response === "1") {
 						canContinue = true;
 					} else {
-						$("#errorBatterySerial").val(sn);
+						$("#errorBatterySerial").val(sn.trim());
 						$("#errorBatteryNotExistOrWithOtherSystem").modal("show");
 					}
 				}
@@ -316,13 +316,14 @@ function verifyModulesLiFePO() {
 				data: {
 					action: "verify_bms",
 					system: system_serial,
-					serialnumber: sn },
+					serialnumber: sn.trim()
+				},
 				error: () => { alert("E008. Please refresh the page!"); },
 				success: (response) => {
 					if(response === "1") {
 						canContinue = true;
 					} else {
-						$("#errorBmsSerial").val(sn);
+						$("#errorBmsSerial").val(sn.trim());
 						$("#errorBmsNotExistOrWithOtherSystem").modal("show");
 					}
 				}
@@ -343,7 +344,7 @@ function verifyModulesLiFePO() {
 				if(response === "1") {
 					canContinue = true;
 				} else {
-					$("#errorBmsSerial").val(sn);
+					$("#errorBmsSerial").val(sn.trim());
 					$("#errorBmsNotExistOrWithOtherSystem").modal("show");
 				}
 			}
@@ -1348,11 +1349,10 @@ function setValuesToSession() {
 		var slaveBMS  = [];
 		var batteries = [];
 		$("#lifepo_bms").val().trim().split("\n").forEach(sn => {
-				 if(sn.trim().startsWith("PPTBB0")) masterBMS = sn;
-			else if(sn.trim().startsWith("PPTBP0")) slaveBMS.push(sn);
+			if(sn.trim() != "") { if(sn.trim().startsWith("PPTBB0")) masterBMS = sn.trim(); else slaveBMS.push(sn.trim()); }
 		});
 		$("#lifepo_serialnumbers").val().trim().split("\n").forEach(sn => {
-				if(sn.trim().startsWith("PPTBP1")) batteries.push(sn);
+			if(sn.trim() != "") batteries.push(sn.trim());
 		});
 		tempData.battery_bms_master    = masterBMS;
 		tempData.battery_bms_slave     = slaveBMS.join(",");
@@ -1491,8 +1491,8 @@ function setup1() {
 	setSetting("ModbusUpsOutputDevice"  , "0", "v5"  , "1");
 	setSetting("ModbusGridDevice"       , "0", "v5"  , "1");
 	setSetting("ModbusExtSolarDevice"   , "0", "v5"  , "1");
-	setSetting("ModbusUpsInputDataFrom" , "0", "mode", "1");
-	setSetting("ModbusUpsOutputDataFrom", "0", "mode", "1");
+	setSetting("ModbusUpsInputDataFrom" , "0", "mode", "0");
+	setSetting("ModbusUpsOutputDataFrom", "0", "mode", "0");
 
 
 
@@ -1610,7 +1610,7 @@ function setup1() {
 
 	if(isLiFePO()) {
 		var lifepoCount = 0;
-		$("#lifepo_serialnumbers").val().trim().split("\n").forEach(sn => { if(sn.trim().startsWith("PPTBP1")) lifepoCount += 1; });
+		$("#lifepo_serialnumbers").val().trim().split("\n").forEach(sn => { if(sn.trim() != "") lifepoCount += 1; });
 		var lifepoStrings = Math.round(lifepoCount / 23); // Can have 22 modules or 24 modules, so divide by 23
 		batteryType                = 4;
 		batteryVoltage             = 3200;
