@@ -177,7 +177,7 @@ function testEnergyMeter() {
 	if(!hasModbus || (!hasUpsInput && !hasUpsOutput && !hasGrid && !hasExtSolar)) {
 		$("#testEnergyMeter .notif").removeClass("loading error success").addClass("error");
 		$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.performing_test}`);
-		return setTimeout(testBatteryCharging, 2500);
+		return setTimeout(disableAutomatic, 1250);
 	}
 
 	// Check if all connected E.Meters are working
@@ -198,13 +198,13 @@ function testEnergyMeter() {
 				if(allCorrect) {
 					$("#testEnergyMeter .notif").addClass("success");
 					$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.performing_test}`);
-					setTimeout(testBatteryCharging, 2500);
+					setTimeout(disableAutomatic, 1250);
 				} else {
 					$("#testEnergyMeter .notif").addClass("error");
 					$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.performing_test}`);
 					if(skipEnergyMeteryTest) {
 						if(confirm("Continue without Energy Meter?")) {
-							setTimeout(testBatteryCharging, 2500);
+							setTimeout(disableAutomatic, 1250);
 						} else {
 							skipEnergyMeteryTest = false;
 							setTimeout(testEnergyMeter, 5000);
@@ -235,6 +235,25 @@ function testEnergyMeter() {
 
 
 /*
+	Disable Automatic
+*/
+
+function disableAutomatic() {
+	$.get({
+		url: "api.php?set=command&type=10&entity=21&text1=0 BxDrive&text2=0",
+		error: () => { alert("E060. Please refresh the page!"); },
+		success: (response) => {
+			if(response != "1") return alert("E061. Please refresh the page!");
+			setTimeout(testBatteryCharging, 1250);
+		}
+	});
+}
+
+
+
+
+
+/*
 	Test Battery Charging
 */
 
@@ -252,7 +271,8 @@ function testBatteryCharging() {
 		error: () => { alert("E005. Please refresh the page!"); },
 		success: (response) => {
 
-			if(!response || typeof response != "object") return alert("E006. Please refresh the page!");
+			if(!response || typeof response != "object")
+				return alert("E006. Please refresh the page!");
 
 			var batteryLevel = 50; // Default Value (to skip level test for carbon and other bat.)
 			if(response.hasOwnProperty("1074") && response["1074"].hasOwnProperty("1"))
@@ -263,7 +283,7 @@ function testBatteryCharging() {
 				batteryVoltage = Math.round(parseInt(response["1042"]["1"]) / 100);
 
 			// Charge Battery
-			if(!batteryCharging_alreadyCharged && (isLiFePO() && batteryLevel < batteryMinLevel || batteryVoltage < batteryMinVoltage)) {
+			if(!batteryCharging_alreadyCharged && (isLiFePO() && batteryLevel < batteryMinLevel || !isLiFePO() && batteryVoltage < batteryMinVoltage)) {
 				if(isLiFePO()) {
 					$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.verifying_battery_soc} (${batteryLevel}%)`);
 					$("#log").append(`<p>${lang.system_test.charging_battery_to} ${batteryMinLevel}%</p>`);
@@ -283,7 +303,7 @@ function testBatteryCharging() {
 				});
 			}
 			// Discharge Battery
-			else if(!batteryCharging_alreadyCharged && (isLiFePO() && batteryLevel > batteryMaxLevel || batteryVoltage > batteryMaxVoltage)) {
+			else if(!batteryCharging_alreadyCharged && (isLiFePO() && batteryLevel > batteryMaxLevel || !isLiFePO() && batteryVoltage > batteryMaxVoltage)) {
 				if(isLiFePO()) {
 					$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.verifying_battery_soc} (${batteryLevel}%)`);
 					$("#log").append(`<p>${lang.system_test.discharging_battery_to} ${batteryMaxLevel}%</p>`);
@@ -439,17 +459,24 @@ function testBatteryCharging_test() {
 				else {
 					$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.performing_test} (${batteryCharging_count} / 5)`);
 					$.get({
-						url: "api.php?set=command&type=20480&entity=0&text1=-500&text2=0",
+						url: "api.php?set=command&type=20480&entity=0&text1=-500&text2=0", // Set Charging Current to -5A
 						error: () => { alert("E034. Please refresh the page!"); },
 						success: (response) => {
 							if(response != "1") return alert("E035. Please refresh the page!");
-							$("#log").append(`<p>${lang.system_test.disable_ac_charging}</p>`);
-							scrollToBottom();
-							setTimeout(() => {
-								$("#testBatteryCharging .notif").removeClass("loading error success").addClass("success");
-								$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.disable_ac_charging}`);
-								setTimeout(testUpsMode, 2500);
-							}, 15000);
+							$.get({
+								url: "api.php?set=command&type=10&entity=21&text1=0 BxDrive&text2=1", // Enable Automatic
+								error: () => { alert("E036. Please refresh the page!"); },
+								success: (response) => {
+									if(response != "1") return alert("E037. Please refresh the page!");
+									$("#log").append(`<p>${lang.system_test.disable_ac_charging}</p>`);
+									scrollToBottom();
+									setTimeout(() => {
+										$("#testBatteryCharging .notif").removeClass("loading error success").addClass("success");
+										$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.disable_ac_charging}`);
+										setTimeout(testUpsMode, 2500);
+									}, 15000);
+								}
+							});
 						}
 					});
 				}

@@ -43,6 +43,8 @@ var isSettingParameters = false;
 var checkParametersInterval;
 var checkParametersCounter;
 
+var lastSettings = {}
+
 
 
 
@@ -423,6 +425,13 @@ $("#modalSkipSetup input").on("keypress", (e) => {
 var bxSet = { "name":1, "mode":11, "v1":21, "v2":22, "v3":23, "v4":24, "v5":25, "v6":26, "s1":31, "s2":32 };
 
 function setSetting(varname, entity, field, value) {
+	// Make sure it's not the same
+	if(lastSettings.hasOwnProperty(varname))
+		if(lastSettings[varname].hasOwnProperty(entity))
+			if(lastSettings[varname][entity].hasOwnProperty(field))
+				if(lastSettings[varname][entity][field] == value)
+					return;
+	// Send Command
 	return sendCommand(11, bxSet[field], entity + " " + varname, value);
 }
 
@@ -935,6 +944,8 @@ function step4() {
 			console.log(response);
 
 			if(!response || typeof response != "object") return alert("E003. Please refresh the page!");
+
+			lastSettings = response;
 
 			// Show Solar Controllers Settings
 			if(response.hasOwnProperty("NominalSol")) {
