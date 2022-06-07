@@ -1643,7 +1643,7 @@ function setup1() {
 		batteryMaxChargeC          = 15;
 		batteryMaxDischargeC       = 100;
 		batteryChargeCurrent       = Math.round(batteryAh * 0.15 * 100);
-		batteryMinDischargeVoltage = 35800;
+		batteryMinDischargeVoltage = 35600;
 		batteryVoltageHysteresis   = 5000;
 		batteryDischargeCurrent    = Math.round(batteryAh * 0.40 * 100);
 		redischargingVoltage       = 40500;
