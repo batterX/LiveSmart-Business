@@ -4,6 +4,10 @@
 sudo cp /home/pi/livesmart-business/html /var/www -r
 sudo chmod 777 /var/www -R
 
+sudo rm /home/pi/MqttStream
+sudo cp /home/pi/livesmart-business/MqttStream /home/pi
+sudo chmod 777 /home/pi/MqttStream
+
 sudo rm /home/pi/CloudStream
 sudo cp /home/pi/livesmart-business/CloudStream /home/pi
 sudo chmod 777 /home/pi/CloudStream
@@ -29,6 +33,7 @@ sudo chown pi /home/pi/program/TestDb
 
 
 
+sudo kill $(pgrep "MqttStream")
 sudo kill $(pgrep "CloudStream")
 
 sudo killall BatterN -9
