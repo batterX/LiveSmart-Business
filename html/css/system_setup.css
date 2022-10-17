@@ -34,3 +34,10 @@ textarea {
 	font-size: 1.25rem;
 	margin-left: 1rem;
 }
+
+#bxBusiness.can-import-cloud-data .main-card {
+	height: calc(100% - 3.75rem - 4.5rem) !important;
+}
+#bxBusiness.can-import-cloud-data .import-data-card {
+	display: block !important;
+}

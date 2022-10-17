@@ -24,6 +24,8 @@ $serial = substr($output, $pos + 10, 16);
 $apikey = sha1(strval($serial));
 $_SESSION["box_apikey"] = $apikey;
 
+$customerEmail = empty($_SESSION["customer_email"]) ? "" : $_SESSION["customer_email"];
+
 ?>
 
 
@@ -162,6 +164,17 @@ $_SESSION["box_apikey"] = $apikey;
 						<p class="mb-0" style="color:red"><?php echo $lang["bs_system_setup"]["otherbatteriesconfirm_message2"] ?></p>
 					</div>
 					<div class="modal-footer"><button type="button" class="btn btn-sm px-4 py-2 btn-success ripple" style="min-width:50%"><b><?php echo $lang["bs_system_setup"]["otherbatteriesconfirm_confirm"] ?></b></button></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="importingDataFromCloud" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog modal-dialog-centered modal-sm">
+				<div class="modal-content">
+					<div class="modal-body text-center py-4">
+						<span><b>Importing Data from Cloud</b></span>
+						<span class="d-block mt-3"><b>Please Wait…</b></span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -306,7 +319,7 @@ $_SESSION["box_apikey"] = $apikey;
 
 						<h1 class="card-header bg-transparent border-0"><?php echo $lang["bs_system_setup"]["system"]; ?></h1>
 
-						<div class="card elevate-1 h-100">
+						<div class="main-card card elevate-1 h-100">
 							<div class="card-body border-bottom">
 								<label for="bx_system"><?php echo $lang["bs_system_setup"]["system_serialnumber_ups"]; ?></label>
 								<input id="bx_system" class="form-control form-control-outline" type="text" placeholder="<?php echo $lang["common"]["serialnumber"]; ?>" required>
@@ -338,6 +351,12 @@ $_SESSION["box_apikey"] = $apikey;
 							</div>
 							<div class="card-body p-2">
 								<button id="btnInstallerMemo" type="button" class="btn btn-custom btn-block ripple p-2" data-toggle="modal" data-target="#modalInstallerMemo"><small><b><?php echo $lang["bs_system_setup"]["system_installer_memo"]; ?></b></small></button>
+							</div>
+						</div>
+
+						<div class="import-data-card card elevate-1 mt-3 d-none" style="height: auto !important">
+							<div class="card-body p-2">
+								<button id="btnImportDataFromCloud" type="button" class="btn btn-block ripple p-2" style="color:darkorange"><small><b>Import data from Cloud</b></small></button>
 							</div>
 						</div>
 
@@ -715,6 +734,7 @@ PPTBP1xxxxxxxxxx
 		<script src="js/common.js?v=<?php echo $versionHash ?>"></script>
 		<script>const lang = <?php echo json_encode($lang) ?>;</script>
 		<script>const apikey = <?php echo json_encode($apikey) ?>;</script>
+		<script>const customerEmail = <?php echo json_encode($customerEmail) ?>;</script>
 		<script src="js/system_setup.js?v=<?php echo $versionHash ?>"></script>
 
 

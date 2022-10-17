@@ -49,7 +49,7 @@ function step1() {
 function step2() {
 
 	$.post({
-		url: "https://api.batterx.io/v3/install.php",
+		url: "https://api.batterx.app/v1/install.php",
 		data: {
 			action: "get_box_serial",
 			apikey: apikey

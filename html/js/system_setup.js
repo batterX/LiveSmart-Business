@@ -43,7 +43,8 @@ var isSettingParameters = false;
 var checkParametersInterval;
 var checkParametersCounter;
 
-var lastSettings = {}
+var dataSettings = {};
+var importedData = {};
 
 
 
@@ -236,7 +237,7 @@ function verifySolarControllers() {
 		if(canContinue) {
 			canContinue = false;
 			$.post({
-				url: "https://api.batterx.io/v3/install.php",
+				url: "https://api.batterx.app/v1/install.php",
 				async: false,
 				data: {
 					action: "verify_controller",
@@ -290,7 +291,7 @@ function verifyModulesLiFePO() {
 		if(canContinue) {
 			canContinue = false;
 			$.post({
-				url: "https://api.batterx.io/v3/install.php",
+				url: "https://api.batterx.app/v1/install.php",
 				async: false,
 				data: {
 					action: "verify_battery",
@@ -313,7 +314,7 @@ function verifyModulesLiFePO() {
 		if(canContinue) {
 			canContinue = false;
 			$.post({
-				url: "https://api.batterx.io/v3/install.php",
+				url: "https://api.batterx.app/v1/install.php",
 				async: false,
 				data: {
 					action: "verify_bms",
@@ -335,7 +336,7 @@ function verifyModulesLiFePO() {
 	if(canContinue) {
 		canContinue = false;
 		$.post({
-			url: "https://api.batterx.io/v3/install.php",
+			url: "https://api.batterx.app/v1/install.php",
 			async: false,
 			data: {
 				action: "verify_bms",
@@ -419,6 +420,271 @@ $("#modalSkipSetup input").on("keypress", (e) => {
 
 
 /*
+    Helper Functions
+*/
+
+function showSystemInfo(json) {
+
+    if(!json) return;
+
+	// Set System Info
+	if(json.hasOwnProperty("system") && json.system.hasOwnProperty("serialnumber"))
+		$("#bx_system").val(json.system.serialnumber).attr("disabled", true);
+
+	// Set Device Info
+	if(json.hasOwnProperty("device") && json.device.hasOwnProperty("nominal_power"))
+		$("#bx_model").val(json.device.nominal_power).attr("disabled", true);
+
+	// Set Installation Date
+	if(json.hasOwnProperty("installation_date"))
+		$("#installation_date").val(json.installation_date);
+
+	// Set Solar Info
+	if(json.hasOwnProperty("solar_info"))
+		$("#solar_info").val(json.solar_info);
+
+	// Set Generator Info
+	if(json.hasOwnProperty("generator_info"))
+		$("#generator_info").val(json.generator_info);
+
+	// Set Installer Memo
+	if(json.hasOwnProperty("note"))
+		$("#installer_memo").val(json.note);
+
+	// Set Solar Controllers Info
+	if(json.hasOwnProperty("solar_controllers") && json.solar_controllers.length > 0) {
+		if(json.solar_controllers.length > 0) {
+			if(json.solar_controllers[0].hasOwnProperty("serialnumber"   )) $("#solar_c1_serial").val(json.solar_controllers[0].serialnumber   );
+			if(json.solar_controllers[0].hasOwnProperty("installed_power")) $("#solar_c1_power ").val(json.solar_controllers[0].installed_power);
+		}
+		if(json.solar_controllers.length > 1) {
+			if(json.solar_controllers[1].hasOwnProperty("serialnumber"   )) $("#solar_c2_serial").val(json.solar_controllers[1].serialnumber   );
+			if(json.solar_controllers[1].hasOwnProperty("installed_power")) $("#solar_c2_power ").val(json.solar_controllers[1].installed_power);
+		}
+		if(json.solar_controllers.length > 2) {
+			if(json.solar_controllers[2].hasOwnProperty("serialnumber"   )) $("#solar_c3_serial").val(json.solar_controllers[2].serialnumber   );
+			if(json.solar_controllers[2].hasOwnProperty("installed_power")) $("#solar_c3_power ").val(json.solar_controllers[2].installed_power);
+		}
+		if(json.solar_controllers.length > 3) {
+			if(json.solar_controllers[3].hasOwnProperty("serialnumber"   )) $("#solar_c4_serial").val(json.solar_controllers[3].serialnumber   );
+			if(json.solar_controllers[3].hasOwnProperty("installed_power")) $("#solar_c4_power ").val(json.solar_controllers[3].installed_power);
+		}
+		if(json.solar_controllers.length > 4) {
+			if(json.solar_controllers[4].hasOwnProperty("serialnumber"   )) $("#solar_c5_serial").val(json.solar_controllers[4].serialnumber   );
+			if(json.solar_controllers[4].hasOwnProperty("installed_power")) $("#solar_c5_power ").val(json.solar_controllers[4].installed_power);
+		}
+		if(json.solar_controllers.length > 5) {
+			if(json.solar_controllers[5].hasOwnProperty("serialnumber"   )) $("#solar_c6_serial").val(json.solar_controllers[5].serialnumber   );
+			if(json.solar_controllers[5].hasOwnProperty("installed_power")) $("#solar_c6_power ").val(json.solar_controllers[5].installed_power);
+		}
+		if(json.solar_controllers.length > 6) {
+			if(json.solar_controllers[6].hasOwnProperty("serialnumber"   )) $("#solar_c7_serial").val(json.solar_controllers[6].serialnumber   );
+			if(json.solar_controllers[6].hasOwnProperty("installed_power")) $("#solar_c7_power ").val(json.solar_controllers[6].installed_power);
+		}
+		if(json.solar_controllers.length > 7) {
+			if(json.solar_controllers[7].hasOwnProperty("serialnumber"   )) $("#solar_c8_serial").val(json.solar_controllers[7].serialnumber   );
+			if(json.solar_controllers[7].hasOwnProperty("installed_power")) $("#solar_c8_power ").val(json.solar_controllers[7].installed_power);
+		}
+		if(json.solar_controllers.length > 2) $("#btnShowAllControllers").click();
+	}
+
+	// Set Batteries Info
+	if(json.hasOwnProperty("batteries")) {
+		// Multiple Batteries (LiFePO Only)
+		if(json.batteries.length > 1) {
+			var tempArr = [];
+			json.batteries.forEach(battery => { tempArr.push(battery.serialnumber); });
+			$("#lifepo_serialnumbers").val(tempArr.join("\n"));
+			tempArr = [];
+			json.batteries_bms.forEach(bms => { tempArr.push(bms.serialnumber); });
+			$("#lifepo_bms").val(tempArr.join("\n"));
+		}
+		// Single Battery (LiFePO|Carbon|Other)
+		else if(json.batteries.length == 1 && json.batteries[0].hasOwnProperty("serialnumber") && json.batteries[0].hasOwnProperty("type")) {
+			var battery = json.batteries[0];
+			// LiFePO
+			if(battery.type == 0) {
+				$("#lifepo_serialnumbers").val(battery.serialnumber);
+			}
+			// Carbon
+			else if(battery.type == 1) {
+				$("#bx_battery_type_1").prop("checked", true).trigger("change");
+				if(battery.hasOwnProperty("capacity")) $("#carbon_battery_capacity").val(`${battery.capacity} Wh`);
+				if(battery.hasOwnProperty("strings" )) $("#carbon_battery_strings ").val(battery.strings).trigger("change");
+				if(battery.hasOwnProperty("model"   )) $("#carbon_battery_model   ").val(battery.model  ).trigger("change");
+			}
+			// Other
+			else if(battery.type == 9) {
+				$("#bx_battery_type_9").prop("checked", true).trigger("change");
+			}
+		}
+		// No Batteries
+		else {
+			$("#bx_battery_type_9").prop("checked", true).trigger("change");
+		}
+	}
+
+	isAlreadyRegistered = true;
+
+}
+
+
+
+
+
+
+
+
+
+
+/*
+    Helper Functions
+*/
+
+function showSystemSettings(response) {
+
+	// Show Solar Controllers Settings
+	if(response.hasOwnProperty("NominalSol")) {
+		var temp = response["NominalSol"];
+		if(temp.hasOwnProperty("1")) { $("#solar_c1_power").val(temp["1"]["v1"]).trigger("input"); }
+		if(temp.hasOwnProperty("2")) { $("#solar_c2_power").val(temp["2"]["v1"]).trigger("input"); }
+		if(temp.hasOwnProperty("3")) { $("#solar_c3_power").val(temp["3"]["v1"]).trigger("input"); }
+		if(temp.hasOwnProperty("4")) { $("#solar_c4_power").val(temp["4"]["v1"]).trigger("input"); }
+		if(temp.hasOwnProperty("5")) { $("#solar_c5_power").val(temp["5"]["v1"]).trigger("input"); }
+		if(temp.hasOwnProperty("6")) { $("#solar_c6_power").val(temp["6"]["v1"]).trigger("input"); }
+		if(temp.hasOwnProperty("7")) { $("#solar_c7_power").val(temp["7"]["v1"]).trigger("input"); }
+		if(temp.hasOwnProperty("8")) { $("#solar_c8_power").val(temp["8"]["v1"]).trigger("input"); }
+	}
+
+	// Show Battery Settings
+	var ah                  = null;
+	var maxChargeC          = null;
+	var maxDischargeC       = null;
+	var minDischargeVoltage = null;
+	var voltageHysteresis   = null;
+	var dischargeCurrent    = null;
+	if(response.hasOwnProperty("NominalBattValue") && response["NominalBattValue"].hasOwnProperty("0")) {
+		var temp = response["NominalBattValue"]["0"];
+		ah                  = parseInt(temp["v1"]);
+		maxChargeC          = parseInt(temp["v2"]) / 100;
+		maxDischargeC       = parseInt(temp["v3"]) / 100;
+	}
+	if(response.hasOwnProperty("SystemMode") && response["SystemMode"].hasOwnProperty("0")) {
+		var temp = response["SystemMode"]["0"];
+		minDischargeVoltage = parseInt(temp["v2"]) / 100;
+		voltageHysteresis   = parseInt(temp["v3"]) / 100;
+		dischargeCurrent    = parseInt(temp["v4"]) / 100;
+	}
+	if(ah                  != null) $("#other_battery_ah                 ").val(ah                 );
+	if(maxChargeC          != null) $("#other_battery_maxChargeC         ").val(maxChargeC         );
+	if(maxDischargeC       != null) $("#other_battery_maxDischargeC      ").val(maxDischargeC      );
+	if(minDischargeVoltage != null) $("#other_battery_minDischargeVoltage").val(minDischargeVoltage);
+	if(voltageHysteresis   != null) $("#other_battery_voltageHysteresis  ").val(voltageHysteresis  );
+	if(dischargeCurrent    != null) $("#other_battery_dischargeCurrent   ").val(dischargeCurrent   );
+
+	// Show System Mode Settings
+	if(response.hasOwnProperty("SystemMode") && response["SystemMode"].hasOwnProperty("0")) {
+		var temp = response["SystemMode"]["0"];
+		$("#sysmode_mode").val(temp["mode"]).trigger("change");
+	}
+	if(response.hasOwnProperty("EcoMode") && response["EcoMode"].hasOwnProperty("0")) {
+		var temp = response["EcoMode"]["0"];
+		$("#sysmode_eco").val(temp["v1"]);
+	}
+	if(response.hasOwnProperty("PfcSet") && response["PfcSet"].hasOwnProperty("0")) {
+		var temp = response["PfcSet"]["0"];
+		$("#sysmode_pfc").val(temp["v1"]);
+	}
+	if(response.hasOwnProperty("CutPowerPeak") && response["CutPowerPeak"].hasOwnProperty("0")) {
+		var temp = response["CutPowerPeak"]["0"];
+		$("#sysmode_cutpeak_max   ").val(parseInt(temp["v1"]));
+		$("#sysmode_cutpeak_hyst  ").val(parseInt(temp["v2"]));
+		$("#sysmode_cutpeak_target").val(parseInt(temp["v1"]) - parseInt(temp["v2"]));
+	}
+
+	// Show LiFePO Connection
+	if(response.hasOwnProperty("BattModbusConnect") && response["BattModbusConnect"].hasOwnProperty("0")) {
+		var temp = response["BattModbusConnect"]["0"];
+		$("#lifepo_portname").val(temp["s1"]);
+		$("#lifepo_portname")[0].scrollLeft = $("#lifepo_portname")[0].scrollWidth;
+	}
+	
+	// Show Modbus Connection
+	if(response.hasOwnProperty("PowerModbusConnect") && response["PowerModbusConnect"].hasOwnProperty("0")) {
+		var temp = response["PowerModbusConnect"]["0"];
+		$("#modbus_mode    ").val(temp["mode"]);
+		$("#modbus_baudrate").val(temp["v1"]);
+		$("#modbus_parity  ").val(temp["s2"].length > 0 ? temp["s2"].charAt(0) : "");
+		$("#modbus_stopbits").val(temp["v3"]);
+		$("#modbus_portname").val(temp["s1"]);
+		$("#modbus_portname")[0].scrollLeft = $("#modbus_portname")[0].scrollWidth;
+	}
+
+	// Show Modbus Devices
+	if(response.hasOwnProperty("ModbusUpsInputDevice") && response["ModbusUpsInputDevice"].hasOwnProperty("0")) {
+		var temp = response["ModbusUpsInputDevice"]["0"];
+		$("#modbus_input_on").val(temp["mode"]);
+		$("#modbus_input_id").val(temp["v1"]);
+	}
+	if(response.hasOwnProperty("ModbusUpsOutputDevice") && response["ModbusUpsOutputDevice"].hasOwnProperty("0")) {
+		var temp = response["ModbusUpsOutputDevice"]["0"];
+		$("#modbus_output_on").val(temp["mode"]);
+		$("#modbus_output_id").val(temp["v1"]);
+	}
+	if(response.hasOwnProperty("ModbusGridDevice") && response["ModbusGridDevice"].hasOwnProperty("0")) {
+		var temp = response["ModbusGridDevice"]["0"];
+		$("#modbus_grid_on").val(temp["mode"]);
+		$("#modbus_grid_id").val(temp["v1"]);
+	}
+	if(response.hasOwnProperty("ModbusExtSolarDevice") && response["ModbusExtSolarDevice"].hasOwnProperty("0")) {
+		var temp = response["ModbusExtSolarDevice"]["0"];
+		$("#modbus_extsol_on").val(temp["mode"]);
+		$("#modbus_extsol_id").val(temp["v1"]);
+	}
+
+	// Show Generator Settings
+	if(response.hasOwnProperty("GeneratorSetGlobal") && response["GeneratorSetGlobal"].hasOwnProperty("0")) {
+		var temp = response["GeneratorSetGlobal"]["0"];
+		$("#generator_enable      ").val(temp["mode"] == "2" ? "1": "0");
+		$("#generator_pin         ").val(temp["v1"]);
+		$("#generator_pinOld      ").val(temp["v1"]);
+		$("#generator_currentLimit").val(temp["v2"] != 1 ? "" : Math.round(temp["v3"] / 10) / 10);
+	}
+	if(response.hasOwnProperty("GeneratorSetOn") && response["GeneratorSetOn"].hasOwnProperty("0")) {
+		var temp = response["GeneratorSetOn"]["0"];
+		$("#generator_switchOnType   ").val(temp["mode"]).trigger("change");
+		$("#generator_switchOnVoltage").val(Math.round(parseInt(temp["v2"]) / 100));
+		$("#generator_minOnTime      ").val(Math.round(parseInt(temp["v1"]) / 60));
+		var tempHH = Math.floor(parseInt(temp["v2"]) / 3600).toString();
+		var tempMM = Math.floor((parseInt(temp["v2"]) - tempHH * 3600) / 60).toString();
+		if(tempHH.length == 1) tempHH = "0" + tempHH;
+		if(tempMM.length == 1) tempMM = "0" + tempMM;
+		$("#generator_switchOnTime").val(tempHH + ":" + tempMM);
+	}
+	if(response.hasOwnProperty("GeneratorSetOff") && response["GeneratorSetOff"].hasOwnProperty("0")) {
+		var temp = response["GeneratorSetOff"]["0"];
+		$("#generator_switchOffType   ").val(temp["mode"]).trigger("change");
+		$("#generator_switchOffVoltage").val(Math.round(parseInt(temp["v2"]) / 100));
+		$("#generator_minOffTime      ").val(Math.round(parseInt(temp["v1"]) / 60));
+		var tempHH = Math.floor(parseInt(temp["v2"]) / 3600).toString();
+		var tempMM = Math.floor((parseInt(temp["v2"]) - tempHH * 3600) / 60).toString();
+		if(tempHH.length == 1) tempHH = "0" + tempHH;
+		if(tempMM.length == 1) tempMM = "0" + tempMM;
+		$("#generator_switchOffTime").val(tempHH + ":" + tempMM);
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+/*
 	Helper Functions
 */
 
@@ -426,10 +692,10 @@ var bxSet = { "name":1, "mode":11, "v1":21, "v2":22, "v3":23, "v4":24, "v5":25, 
 
 function setSetting(varname, entity, field, value) {
 	// Make sure it's not the same
-	if(lastSettings.hasOwnProperty(varname))
-		if(lastSettings[varname].hasOwnProperty(entity))
-			if(lastSettings[varname][entity].hasOwnProperty(field))
-				if(lastSettings[varname][entity][field] == value)
+	if(dataSettings.hasOwnProperty(varname))
+		if(dataSettings[varname].hasOwnProperty(entity))
+			if(dataSettings[varname][entity].hasOwnProperty(field))
+				if(dataSettings[varname][entity][field] == value)
 					return;
 	// Send Command
 	return sendCommand(11, bxSet[field], entity + " " + varname, value);
@@ -457,6 +723,179 @@ function sendCommand(type, entity, text1, text2) {
 //////////////////////////////////////////////////
 //////////////////////////////////////////////////
 //////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+/*
+    Show|Hide Import Data From Cloud Button
+*/
+
+$("#bx_system").on("change", () => showImportDataFromCloud());
+
+function showImportDataFromCloud() {
+
+    $("#bxBusiness").removeClass("can-import-cloud-data");
+
+    if($("#bx_system").val().trim() == "") return;
+    if(Object.keys(dataSettings).length == 0) return;
+    if(!dataSettings.hasOwnProperty("CloudSet")) return;
+    if(!dataSettings["CloudSet"].hasOwnProperty("0")) return;
+    if(!dataSettings["CloudSet"]["0"].hasOwnProperty("mode")) return;
+    if(dataSettings["CloudSet"]["0"]["mode"].toString() != "0") return;
+
+    $.post({
+        url: "https://api.batterx.app/v1/install.php",
+        data: {
+            action : "get_system_data",
+            system : $("#bx_system").val().trim(),
+            customer : customerEmail.trim()
+        },
+        error: () => { alert("E013. Please refresh the page!"); },
+        success: (json) => {
+            console.log(json);
+            if(!json) return;
+            importedData = json;
+            $("#bxBusiness").addClass("can-import-cloud-data");
+        }
+    });
+
+}
+
+
+
+
+
+
+
+
+
+
+/*
+    Show Imported Data From Cloud
+*/
+
+$("#btnImportDataFromCloud").on("click", () => {
+    importSystemInfo();
+    importSystemSettings();
+    $("#bxBusiness").removeClass("can-import-cloud-data");
+});
+
+
+
+
+
+
+
+
+
+
+/*
+    Show Imported Data From Cloud
+*/
+
+function importSystemInfo() {
+    if(!importedData.hasOwnProperty("info")) return;
+    showSystemInfo(importedData.info);
+}
+
+
+
+
+
+
+
+
+
+
+/*
+    Log All Imported Settings to Database
+*/
+
+function importSystemSettings() {
+
+    if(!importedData.hasOwnProperty("settings")) return;
+
+    var response = importedData.settings;
+
+    showSystemSettings(response);
+	
+	$("#importingDataFromCloud").modal("show");
+
+	// "VarName","Entity","Name","InUse","Mode","V1","V2","V3","V4","V5","V6","S1","S2","UpDateTime","CRC"
+	var crc_table = new Uint32Array(256);
+	for(var i=256; i--;) {
+		var tmp = i;
+		for(var k=8; k--;) tmp = tmp & 1 ? 0xedb88320 ^ tmp >>> 1 : tmp >>> 1;
+		crc_table[i] = tmp;
+	}
+	function long_to_bytearray(x) {
+		let y = Math.floor(x/2**32);
+		return [y, (y << 8), (y << 16), (y << 24), x, (x << 8), (x << 16), (x << 24)].map(z => z >>> 24);
+	}
+	function make_crc(longs) {
+		var data = [];
+		longs.forEach(long => { data.push(...long_to_bytearray(long).reverse()); });
+		var crc = -1;
+		for(var i=0, l=data.length; i<l; i++) crc = crc >>> 8 ^ crc_table[ crc & 255 ^ data[i] ];
+		return (crc ^ -1) >>> 0;
+	}
+	var json_array = [];
+	for(var varname in response) {
+		if(response.hasOwnProperty(varname)) {
+			for(var entity in response[varname]) {
+				if(response[varname].hasOwnProperty(entity)) {
+					json_array.push([
+						varname,
+						entity,
+						response[varname][entity]["name"],
+						response[varname][entity]["inuse"],
+						response[varname][entity]["mode"],
+						response[varname][entity]["v1"],
+						response[varname][entity]["v2"],
+						response[varname][entity]["v3"],
+						response[varname][entity]["v4"],
+						response[varname][entity]["v5"],
+						response[varname][entity]["v6"],
+						response[varname][entity]["s1"],
+						response[varname][entity]["s2"],
+						response[varname][entity]["updatetime"],
+						make_crc([
+							parseInt(response[varname][entity]["mode"]),
+							parseInt(response[varname][entity]["v1"]),
+							parseInt(response[varname][entity]["v2"]),
+							parseInt(response[varname][entity]["v3"]),
+							parseInt(response[varname][entity]["v4"]),
+							parseInt(response[varname][entity]["v5"]),
+							parseInt(response[varname][entity]["v6"])
+						])
+					]);
+				}
+			}
+		}
+	}
+
+	$.post({
+		url: "cmd/importsettings.php",
+		data: { data: JSON.stringify(json_array) },
+		error: () => { alert("E011. Please refresh the page!"); },
+		success: (response) => {
+			console.log(response);
+			if(response !== "1") return alert("E012. Please refresh the page!");
+			setTimeout(() => {
+				alert("Data imported successfully!");
+				$("#importingDataFromCloud").modal("hide");
+			}, 2500);
+		}
+	});
+
+}
 
 
 
@@ -755,7 +1194,7 @@ function step1() {
 function step2() {
 
 	$.post({
-		url: "https://api.batterx.io/v3/install.php",
+		url: "https://api.batterx.app/v1/install.php",
 		data: {
 			action: "get_installation_info",
 			apikey: systemApikey
@@ -767,104 +1206,7 @@ function step2() {
 
 			if(!json) { step3(); return; }
 
-			// Set System Info
-			if(json.hasOwnProperty("system") && json.system.hasOwnProperty("serialnumber"))
-				$("#bx_system").val(json.system.serialnumber).attr("disabled", true);
-
-			// Set Device Info
-			if(json.hasOwnProperty("device") && json.device.hasOwnProperty("nominal_power"))
-				$("#bx_model").val(json.device.nominal_power).attr("disabled", true);
-
-			// Set Installation Date
-			if(json.hasOwnProperty("installation_date"))
-				$("#installation_date").val(json.installation_date);
-
-			// Set Solar Info
-			if(json.hasOwnProperty("solar_info"))
-				$("#solar_info").val(json.solar_info);
-
-			// Set Generator Info
-			if(json.hasOwnProperty("generator_info"))
-				$("#generator_info").val(json.generator_info);
-
-			// Set Installer Memo
-			if(json.hasOwnProperty("note"))
-				$("#installer_memo").val(json.note);
-
-			// Set Solar Controllers Info
-			if(json.hasOwnProperty("solar_controllers") && json.solar_controllers.length > 0) {
-				if(json.solar_controllers.length > 0) {
-					if(json.solar_controllers[0].hasOwnProperty("serialnumber"   )) $("#solar_c1_serial").val(json.solar_controllers[0].serialnumber   );
-					if(json.solar_controllers[0].hasOwnProperty("installed_power")) $("#solar_c1_power ").val(json.solar_controllers[0].installed_power);
-				}
-				if(json.solar_controllers.length > 1) {
-					if(json.solar_controllers[1].hasOwnProperty("serialnumber"   )) $("#solar_c2_serial").val(json.solar_controllers[1].serialnumber   );
-					if(json.solar_controllers[1].hasOwnProperty("installed_power")) $("#solar_c2_power ").val(json.solar_controllers[1].installed_power);
-				}
-				if(json.solar_controllers.length > 2) {
-					if(json.solar_controllers[2].hasOwnProperty("serialnumber"   )) $("#solar_c3_serial").val(json.solar_controllers[2].serialnumber   );
-					if(json.solar_controllers[2].hasOwnProperty("installed_power")) $("#solar_c3_power ").val(json.solar_controllers[2].installed_power);
-				}
-				if(json.solar_controllers.length > 3) {
-					if(json.solar_controllers[3].hasOwnProperty("serialnumber"   )) $("#solar_c4_serial").val(json.solar_controllers[3].serialnumber   );
-					if(json.solar_controllers[3].hasOwnProperty("installed_power")) $("#solar_c4_power ").val(json.solar_controllers[3].installed_power);
-				}
-				if(json.solar_controllers.length > 4) {
-					if(json.solar_controllers[4].hasOwnProperty("serialnumber"   )) $("#solar_c5_serial").val(json.solar_controllers[4].serialnumber   );
-					if(json.solar_controllers[4].hasOwnProperty("installed_power")) $("#solar_c5_power ").val(json.solar_controllers[4].installed_power);
-				}
-				if(json.solar_controllers.length > 5) {
-					if(json.solar_controllers[5].hasOwnProperty("serialnumber"   )) $("#solar_c6_serial").val(json.solar_controllers[5].serialnumber   );
-					if(json.solar_controllers[5].hasOwnProperty("installed_power")) $("#solar_c6_power ").val(json.solar_controllers[5].installed_power);
-				}
-				if(json.solar_controllers.length > 6) {
-					if(json.solar_controllers[6].hasOwnProperty("serialnumber"   )) $("#solar_c7_serial").val(json.solar_controllers[6].serialnumber   );
-					if(json.solar_controllers[6].hasOwnProperty("installed_power")) $("#solar_c7_power ").val(json.solar_controllers[6].installed_power);
-				}
-				if(json.solar_controllers.length > 7) {
-					if(json.solar_controllers[7].hasOwnProperty("serialnumber"   )) $("#solar_c8_serial").val(json.solar_controllers[7].serialnumber   );
-					if(json.solar_controllers[7].hasOwnProperty("installed_power")) $("#solar_c8_power ").val(json.solar_controllers[7].installed_power);
-				}
-				if(json.solar_controllers.length > 2) $("#btnShowAllControllers").click();
-			}
-
-			// Set Batteries Info
-			if(json.hasOwnProperty("batteries")) {
-				// Multiple Batteries (LiFePO Only)
-				if(json.batteries.length > 1) {
-					var tempArr = [];
-					json.batteries.forEach(battery => { tempArr.push(battery.serialnumber); });
-					$("#lifepo_serialnumbers").val(tempArr.join("\n"));
-					tempArr = [];
-					json.batteries_bms.forEach(bms => { tempArr.push(bms.serialnumber); });
-					$("#lifepo_bms").val(tempArr.join("\n"));
-				}
-				// Single Battery (LiFePO|Carbon|Other)
-				else if(json.batteries.length == 1 && json.batteries[0].hasOwnProperty("serialnumber") && json.batteries[0].hasOwnProperty("type")) {
-					var battery = json.batteries[0];
-					// LiFePO
-					if(battery.type == 0) {
-						$("#lifepo_serialnumbers").val(battery.serialnumber);
-					}
-					// Carbon
-					else if(battery.type == 1) {
-						$("#bx_battery_type_1").prop("checked", true).trigger("change");
-						if(battery.hasOwnProperty("capacity")) $("#carbon_battery_capacity").val(`${battery.capacity} Wh`);
-						if(battery.hasOwnProperty("strings" )) $("#carbon_battery_strings ").val(battery.strings).trigger("change");
-						if(battery.hasOwnProperty("model"   )) $("#carbon_battery_model   ").val(battery.model  ).trigger("change");
-					}
-					// Other
-					else if(battery.type == 9) {
-						$("#bx_battery_type_9").prop("checked", true).trigger("change");
-					}
-				}
-				// No Batteries
-				else {
-					$("#bx_battery_type_9").prop("checked", true).trigger("change");
-				}
-			}
-
-			isAlreadyRegistered = true;
+			showSystemInfo(json);
 
 			step3();
 
@@ -889,7 +1231,7 @@ function step2() {
 function step3() {
 
 	$.post({
-		url: "https://api.batterx.io/v3/install.php",
+		url: "https://api.batterx.app/v1/install.php",
 		data: {
 			action: "get_box_serial",
 			apikey: systemApikey
@@ -945,137 +1287,12 @@ function step4() {
 
 			if(!response || typeof response != "object") return alert("E003. Please refresh the page!");
 
-			lastSettings = response;
+			dataSettings = JSON.parse(JSON.stringify(response));
 
-			// Show Solar Controllers Settings
-			if(response.hasOwnProperty("NominalSol")) {
-				var temp = response["NominalSol"];
-				if(temp.hasOwnProperty("1")) { $("#solar_c1_power").val(temp["1"]["v1"]).trigger("input"); }
-				if(temp.hasOwnProperty("2")) { $("#solar_c2_power").val(temp["2"]["v1"]).trigger("input"); }
-				if(temp.hasOwnProperty("3")) { $("#solar_c3_power").val(temp["3"]["v1"]).trigger("input"); }
-				if(temp.hasOwnProperty("4")) { $("#solar_c4_power").val(temp["4"]["v1"]).trigger("input"); }
-				if(temp.hasOwnProperty("5")) { $("#solar_c5_power").val(temp["5"]["v1"]).trigger("input"); }
-				if(temp.hasOwnProperty("6")) { $("#solar_c6_power").val(temp["6"]["v1"]).trigger("input"); }
-				if(temp.hasOwnProperty("7")) { $("#solar_c7_power").val(temp["7"]["v1"]).trigger("input"); }
-				if(temp.hasOwnProperty("8")) { $("#solar_c8_power").val(temp["8"]["v1"]).trigger("input"); }
-			}
+			showSystemSettings(response);
 
-			// Show Battery Settings
-			var ah                  = null;
-			var maxChargeC          = null;
-			var maxDischargeC       = null;
-			var minDischargeVoltage = null;
-			var voltageHysteresis   = null;
-			var dischargeCurrent    = null;
-			if(response.hasOwnProperty("NominalBattValue") && response["NominalBattValue"].hasOwnProperty("0")) {
-				var temp = response["NominalBattValue"]["0"];
-				ah                  = parseInt(temp["v1"]);
-				maxChargeC          = parseInt(temp["v2"]) / 100;
-				maxDischargeC       = parseInt(temp["v3"]) / 100;
-			}
-			if(response.hasOwnProperty("SystemMode") && response["SystemMode"].hasOwnProperty("0")) {
-				var temp = response["SystemMode"]["0"];
-				minDischargeVoltage = parseInt(temp["v2"]) / 100;
-				voltageHysteresis   = parseInt(temp["v3"]) / 100;
-				dischargeCurrent    = parseInt(temp["v4"]) / 100;
-			}
-			if(ah                  != null) $("#other_battery_ah                 ").val(ah                 );
-			if(maxChargeC          != null) $("#other_battery_maxChargeC         ").val(maxChargeC         );
-			if(maxDischargeC       != null) $("#other_battery_maxDischargeC      ").val(maxDischargeC      );
-			if(minDischargeVoltage != null) $("#other_battery_minDischargeVoltage").val(minDischargeVoltage);
-			if(voltageHysteresis   != null) $("#other_battery_voltageHysteresis  ").val(voltageHysteresis  );
-			if(dischargeCurrent    != null) $("#other_battery_dischargeCurrent   ").val(dischargeCurrent   );
-
-			// Show System Mode Settings
-			if(response.hasOwnProperty("SystemMode") && response["SystemMode"].hasOwnProperty("0")) {
-				var temp = response["SystemMode"]["0"];
-				$("#sysmode_mode").val(temp["mode"]).trigger("change");
-			}
-			if(response.hasOwnProperty("EcoMode") && response["EcoMode"].hasOwnProperty("0")) {
-				var temp = response["EcoMode"]["0"];
-				$("#sysmode_eco").val(temp["v1"]);
-			}
-			if(response.hasOwnProperty("PfcSet") && response["PfcSet"].hasOwnProperty("0")) {
-				var temp = response["PfcSet"]["0"];
-				$("#sysmode_pfc").val(temp["v1"]);
-			}
-			if(response.hasOwnProperty("CutPowerPeak") && response["CutPowerPeak"].hasOwnProperty("0")) {
-				var temp = response["CutPowerPeak"]["0"];
-				$("#sysmode_cutpeak_max   ").val(parseInt(temp["v1"]));
-				$("#sysmode_cutpeak_hyst  ").val(parseInt(temp["v2"]));
-				$("#sysmode_cutpeak_target").val(parseInt(temp["v1"]) - parseInt(temp["v2"]));
-			}
-
-			// Show LiFePO Connection
-			if(response.hasOwnProperty("BattModbusConnect") && response["BattModbusConnect"].hasOwnProperty("0")) {
-				var temp = response["BattModbusConnect"]["0"];
-				$("#lifepo_portname").val(temp["s1"]);
-				$("#lifepo_portname")[0].scrollLeft = $("#lifepo_portname")[0].scrollWidth;
-			}
-			
-			// Show Modbus Connection
-			if(response.hasOwnProperty("PowerModbusConnect") && response["PowerModbusConnect"].hasOwnProperty("0")) {
-				var temp = response["PowerModbusConnect"]["0"];
-				$("#modbus_mode    ").val(temp["mode"]);
-				$("#modbus_baudrate").val(temp["v1"]);
-				$("#modbus_parity  ").val(temp["s2"].length > 0 ? temp["s2"].charAt(0) : "");
-				$("#modbus_stopbits").val(temp["v3"]);
-				$("#modbus_portname").val(temp["s1"]);
-				$("#modbus_portname")[0].scrollLeft = $("#modbus_portname")[0].scrollWidth;
-			}
-
-			// Show Modbus Devices
-			if(response.hasOwnProperty("ModbusUpsInputDevice") && response["ModbusUpsInputDevice"].hasOwnProperty("0")) {
-				var temp = response["ModbusUpsInputDevice"]["0"];
-				$("#modbus_input_on").val(temp["mode"]);
-				$("#modbus_input_id").val(temp["v1"]);
-			}
-			if(response.hasOwnProperty("ModbusUpsOutputDevice") && response["ModbusUpsOutputDevice"].hasOwnProperty("0")) {
-				var temp = response["ModbusUpsOutputDevice"]["0"];
-				$("#modbus_output_on").val(temp["mode"]);
-				$("#modbus_output_id").val(temp["v1"]);
-			}
-			if(response.hasOwnProperty("ModbusGridDevice") && response["ModbusGridDevice"].hasOwnProperty("0")) {
-				var temp = response["ModbusGridDevice"]["0"];
-				$("#modbus_grid_on").val(temp["mode"]);
-				$("#modbus_grid_id").val(temp["v1"]);
-			}
-			if(response.hasOwnProperty("ModbusExtSolarDevice") && response["ModbusExtSolarDevice"].hasOwnProperty("0")) {
-				var temp = response["ModbusExtSolarDevice"]["0"];
-				$("#modbus_extsol_on").val(temp["mode"]);
-				$("#modbus_extsol_id").val(temp["v1"]);
-			}
-
-			// Show Generator Settings
-			if(response.hasOwnProperty("GeneratorSetGlobal") && response["GeneratorSetGlobal"].hasOwnProperty("0")) {
-				var temp = response["GeneratorSetGlobal"]["0"];
-				$("#generator_enable      ").val(temp["mode"] == "2" ? "1": "0");
-				$("#generator_pin         ").val(temp["v1"]);
-				$("#generator_pinOld      ").val(temp["v1"]);
-				$("#generator_currentLimit").val(temp["v2"] != 1 ? "" : Math.round(temp["v3"] / 10) / 10);
-			}
-			if(response.hasOwnProperty("GeneratorSetOn") && response["GeneratorSetOn"].hasOwnProperty("0")) {
-				var temp = response["GeneratorSetOn"]["0"];
-				$("#generator_switchOnType   ").val(temp["mode"]).trigger("change");
-				$("#generator_switchOnVoltage").val(Math.round(parseInt(temp["v2"]) / 100));
-				$("#generator_minOnTime      ").val(Math.round(parseInt(temp["v1"]) / 60));
-				var tempHH = Math.floor(parseInt(temp["v2"]) / 3600).toString();
-				var tempMM = Math.floor((parseInt(temp["v2"]) - tempHH * 3600) / 60).toString();
-				if(tempHH.length == 1) tempHH = "0" + tempHH;
-				if(tempMM.length == 1) tempMM = "0" + tempMM;
-				$("#generator_switchOnTime").val(tempHH + ":" + tempMM);
-			}
-			if(response.hasOwnProperty("GeneratorSetOff") && response["GeneratorSetOff"].hasOwnProperty("0")) {
-				var temp = response["GeneratorSetOff"]["0"];
-				$("#generator_switchOffType   ").val(temp["mode"]).trigger("change");
-				$("#generator_switchOffVoltage").val(Math.round(parseInt(temp["v2"]) / 100));
-				$("#generator_minOffTime      ").val(Math.round(parseInt(temp["v1"]) / 60));
-				var tempHH = Math.floor(parseInt(temp["v2"]) / 3600).toString();
-				var tempMM = Math.floor((parseInt(temp["v2"]) - tempHH * 3600) / 60).toString();
-				if(tempHH.length == 1) tempHH = "0" + tempHH;
-				if(tempMM.length == 1) tempMM = "0" + tempMM;
-				$("#generator_switchOffTime").val(tempHH + ":" + tempMM);
-			}
+            // Show|Hide Import Data From Cloud Button
+            showImportDataFromCloud();
 			
 		}
 	});
@@ -1153,7 +1370,7 @@ function mainFormSubmit_2() {
 
 	// Check UPS S/N
 	$.post({
-		url: "https://api.batterx.io/v3/install.php",
+		url: "https://api.batterx.app/v1/install.php",
 		data: {
 			action       : "verify_device",
 			serialnumber : $("#bx_system").val(),

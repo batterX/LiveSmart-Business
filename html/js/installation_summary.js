@@ -262,7 +262,7 @@ $("#btnFinishInstallation").on("click", () => {
 			data.append("pdf_file", pdfBlob, lang.bs_summary.installation_summary);
 
 			$.post({
-				url: "https://api.batterx.io/v3/install.php",
+				url: "https://api.batterx.app/v1/install.php",
 				data: data,
 				processData: false,
 				contentType: false,
