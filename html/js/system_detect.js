@@ -49,33 +49,17 @@ function step1() {
 function step2() {
 
 	$.post({
-		url: "https://api.batterx.app/v1/install.php",
+		url: "https://api.batterx.app/v2/install.php",
 		data: {
-			action: "get_box_serial",
+			action: "get_box_info",
 			apikey: apikey
 		},
 		error: () => { alert("E001. Please refresh the page!"); },
 		success: (response) => {
 			console.log(response);
-			var box_serial = response;
-			// Save Serial-Number to Session
-			if(box_serial) {
-				$.post({
-					url: "cmd/session.php",
-					data: { box_serial: box_serial },
-					error: () => { alert("E002. Please refresh the page!"); },
-					success: (response) => {
-						console.log(response);
-						if(response !== "1") return alert("E003. Please refresh the page!");
-						$(".serialnumber b").text(box_serial);
-						// Show Working
-						$("#upsUnknown").addClass("d-none");
-						$("#upsDetected").removeClass("d-none");
-						// Enable Button
-						$("#btn_next").attr("disabled", false);
-					}
-				});
-			} else {
+			var box_info = response;
+			// Save Serial-Number & Part-Number to Session
+			if(!box_info) {
 				// Show Working
 				$("#upsUnknown").addClass("d-none");
 				$("#upsDetected").removeClass("d-none");
@@ -83,6 +67,25 @@ function step2() {
 				$("#btn_next").attr("disabled", false);
 				// Hide Serial Number
 				$(".serialnumber").css("visibility", "hidden").addClass("my-0");
+			} else {
+				$.post({
+					url: "cmd/session.php",
+					data: {
+						box_serial: box_info.serialnumber,
+						box_partnumber: box_info.partnumber
+					},
+					error: () => { alert("E002. Please refresh the page!"); },
+					success: (response) => {
+						console.log(response);
+						if(response !== "1") return alert("E003. Please refresh the page!");
+						$(".serialnumber b").text(box_info.serialnumber);
+						// Show Working
+						$("#upsUnknown").addClass("d-none");
+						$("#upsDetected").removeClass("d-none");
+						// Enable Button
+						$("#btn_next").attr("disabled", false);
+					}
+				});
 			}
 		}
 	});

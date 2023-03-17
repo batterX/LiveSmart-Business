@@ -72,7 +72,8 @@
         "0" : "Kein",
         "1" : "cosφ(P) Kennlinie",
         "2" : "Fester cosφ",
-        "3" : "Q(U) Kennlinie"
+        "3" : "Q(U) Kennlinie",
+        "4" : "Feste Blindleistung (Qfix)"
     },
     
     "dict_bs_sysmode": {
@@ -165,6 +166,7 @@
     "system_test": {
         "system_test"                    : "Systemtest",
         "energy_meter"                   : "Energiezähler",
+        "solar_controllers"              : "Solar Controllers",
         "battery_charging"               : "Batterieladung",
         "ups_mode"                       : "USV-Modus",
         "warning"                        : "Warnung",
@@ -216,6 +218,13 @@
         "extended_overfrequency_reduction"                         : "Wirkleistungsreduzierung bei Überfrequenz",
         "extended_start_of_reduction"                              : "Beginn der Leistungsreduzierung",
         "extended_gradient"                                        : "Gradient",
+        "extended_uefftime"                                        : "Ueff Mittelwert Zeitkonst.",
+        "extended_mingridvoltage"                                  : "Min. Netzspannung",
+        "extended_maxgridvoltage"                                  : "Max. Netzspannung",
+        "extended_mingridfrequency"                                : "Min. Netzfrequenz",
+        "extended_maxgridfrequency"                                : "Max. Netzfrequenz",
+        "extended_gridconnectdelay"                                : "Netzzuschaltverzögerung",
+        "extended_putime"                                          : "P(U) Zeitkonst. (PT1-Glied)",
         "solar"                                                    : "PV-System",
         "solar_size"                                               : "Größe der PV-Anlage",
         "solar_watt_peak"                                          : "Watt Peak (Wp)",
@@ -251,6 +260,8 @@
         "reactive_select_mode"                                     : "Modus auswählen",
         "reactive_overexcited"                                     : "Übererregt",
         "reactive_underexcited"                                    : "Untererregt",
+        "reactive_qutime"                                          : "Q(U) Zeitkonst. (PT1-Glied)",
+        "reactive_kinkpoint"                                       : "Knickpunkt",
         "msg_setting_parameters"                                   : "Wir setzen die Parameter. Bitte warten…",
         "msg_setting_success"                                      : "Einstellung erfolgreich abgeschlossen",
         "msg_solar_size_very_low"                                  : "Die Leistung des PV-Systems scheint sehr gering zu sein.",
@@ -261,8 +272,8 @@
         "msg_system_serial_not_correct"                            : "Seriennummer des Systems nicht gültig",
         "msg_inverter_registered_with_other_system"                : "Der Wechselrichter ist mit einem anderen System registriert!",
         "msg_battery_not_exist_or_registered_with_other_system"    : "Das Batteriemodul existiert nicht oder ist bereits mit einem anderen System registriert.",
-        "msg_low_soc_please_wait"                                  : "Low battery SoC, please wait several minutes",
-        "msg_system_with_sn_does_not_exist"                        : "System with S/N 123 does not exist",
+        "msg_low_soc_please_wait"                                  : "Batterie SoC zu niedrig, bitte warten Sie einige Minuten.",
+        "msg_system_with_sn_does_not_exist"                        : "System mit S/N 123 ist nicht vorhanden.",
         "backupmodeconfirm_title"                                  : "Bestätigen Sie den Ersatzstrom-Modus",
         "backupmodeconfirm_message"                                : "Bitte bestätigen Sie, dass der Ersatzstrom-Adapter angeschlossen ist, wie auf dem Bild unten dargestellt.",
         "backupmodeconfirm_confirm"                                : "Bestätigen",

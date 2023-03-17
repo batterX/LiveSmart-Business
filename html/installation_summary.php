@@ -17,8 +17,8 @@ $_SESSION["back_url" ] = $_SERVER["REQUEST_URI"];
 $_SESSION["last_step"] = $step;
 
 // Define Arrays
-$arrayGender       = $lang["dict_gender"   ];
-$arrayCountry      = $lang["dict_countries"];
+$arrayGender  = $lang["dict_gender"   ];
+$arrayCountry = $lang["dict_countries"];
 
 // Get Battery Type
 $batteryType = isset($_SESSION["battery_type"]) ? $_SESSION["battery_type"] : "";
@@ -149,7 +149,7 @@ if($batteryType == "other" && $_SESSION["battery_capacity"] == "0") $batteryType
 				</div>
                 <div class="box-row bt">
 					<span class="br"><?php echo $lang["bs_summary"]["installation_sn_ups"]; ?></span>
-					<span><?php echo $_SESSION["device_serial"]; ?></b></span>
+					<span><?php echo $_SESSION["device_serial"] . " (" . PNS_DEVICE[$_SESSION["device_partnumber"]]["name"] . ") (" . $_SESSION["device_partnumber"] . ")"; ?></b></span>
 				</div>
                 <div class="box-row bt">
 					<span class="br"><?php echo $lang["bs_summary"]["installation_nominal_power"]; ?></span>
@@ -161,7 +161,7 @@ if($batteryType == "other" && $_SESSION["battery_capacity"] == "0") $batteryType
 				</div>
                 <div class="box-row bt">
 					<span class="br"><?php echo $lang["bs_summary"]["installation_sn_livex"]; ?></span>
-					<span><?php echo $_SESSION["box_serial"] . " (" . $_SESSION["software_version"] . ")"; ?></span>
+					<span><?php echo $_SESSION["box_serial"] . " (" . PNS_BOX[$_SESSION["box_partnumber"]]["name"] . ") (" . $_SESSION["box_partnumber"] . ") (" . $_SESSION["software_version"] . ")"; ?></span>
 				</div>
                 <?php if($batteryType == "lifepo"): ?>
                     <div class="box-row bt">

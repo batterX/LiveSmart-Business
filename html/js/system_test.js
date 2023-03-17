@@ -21,7 +21,9 @@ $progress.trigger("step", 6);
 var dataSettings = {};
 
 var energyMeter_firstRun = true;
-var skipEnergyMeteryTest = false;
+var skipEnergyMeterTest = false;
+
+var solarControllers_firstRun = true;
 
 var batteryCharging_firstRun = true;
 var batteryCharging_count = 0; // run 5 times (5sec delay), then finish
@@ -71,6 +73,13 @@ function scrollToBottom() { $("#log").scrollTop($("#log").prop("scrollHeight"));
 function showLoading_energyMeter() {
 	$("#testEnergyMeter .notif").removeClass("loading error success").addClass("loading");
 	if(energyMeter_firstRun) $("#log").append(`<p class="head"><b>${lang.system_test.energy_meter}</b></p>`);
+	$("#log").append(`<p>${lang.system_test.performing_test}</p>`);
+	scrollToBottom();
+}
+
+function showLoading_solarControllers() {
+	$("#testSolarControllers .notif").removeClass("loading error success").addClass("loading");
+	if(solarControllers_firstRun) $("#log").append(`<p class="head"><b>${lang.system_test.solar_controllers}</b></p>`);
 	$("#log").append(`<p>${lang.system_test.performing_test}</p>`);
 	scrollToBottom();
 }
@@ -177,7 +186,7 @@ function testEnergyMeter() {
 	if(!hasModbus || (!hasUpsInput && !hasUpsOutput && !hasGrid && !hasExtSolar)) {
 		$("#testEnergyMeter .notif").removeClass("loading error success").addClass("error");
 		$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.performing_test}`);
-		return setTimeout(disableAutomatic, 1250);
+		return setTimeout(testSolarControllers, 1250);
 	}
 
 	// Check if all connected E.Meters are working
@@ -198,15 +207,15 @@ function testEnergyMeter() {
 				if(allCorrect) {
 					$("#testEnergyMeter .notif").addClass("success");
 					$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.performing_test}`);
-					setTimeout(disableAutomatic, 1250);
+					setTimeout(testSolarControllers, 1250);
 				} else {
 					$("#testEnergyMeter .notif").addClass("error");
 					$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.performing_test}`);
-					if(skipEnergyMeteryTest) {
+					if(skipEnergyMeterTest) {
 						if(confirm("Continue without Energy Meter?")) {
-							setTimeout(disableAutomatic, 1250);
+							setTimeout(testSolarControllers, 1250);
 						} else {
-							skipEnergyMeteryTest = false;
+							skipEnergyMeterTest = false;
 							setTimeout(testEnergyMeter, 5000);
 						}
 					} else {
@@ -215,6 +224,79 @@ function testEnergyMeter() {
 				}
 			}, 2500);
 			energyMeter_firstRun = false;
+		}
+	});
+
+}
+
+
+
+
+
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+
+
+
+
+
+/*
+	Test Solar Controllers
+*/
+
+function testSolarControllers() {
+
+	showLoading_solarControllers();
+
+	var hasController1 = (hasSetting("NominalSol", 1) && dataSettings["NominalSol"][1]["v1"] > 0);
+	var hasController2 = (hasSetting("NominalSol", 2) && dataSettings["NominalSol"][2]["v1"] > 0);
+	var hasController3 = (hasSetting("NominalSol", 3) && dataSettings["NominalSol"][3]["v1"] > 0);
+	var hasController4 = (hasSetting("NominalSol", 4) && dataSettings["NominalSol"][4]["v1"] > 0);
+	var hasController5 = (hasSetting("NominalSol", 5) && dataSettings["NominalSol"][5]["v1"] > 0);
+	var hasController6 = (hasSetting("NominalSol", 6) && dataSettings["NominalSol"][6]["v1"] > 0);
+	var hasController7 = (hasSetting("NominalSol", 7) && dataSettings["NominalSol"][7]["v1"] > 0);
+	var hasController8 = (hasSetting("NominalSol", 8) && dataSettings["NominalSol"][8]["v1"] > 0);
+
+	// Skip if all solar controllers are off
+	if(!hasController1 && !hasController2 && !hasController3 && !hasController4 && !hasController5 && !hasController6 && !hasController7 && !hasController8) {
+		$("#testSolarControllers .notif").removeClass("loading error success").addClass("error");
+		$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.performing_test}`);
+		return setTimeout(disableAutomatic, 1250);
+	}
+
+	// Check if all connected solar controllers are working
+	$.get({
+		url: "api.php?get=currentstate",
+		error: () => { alert("E003. Please refresh the page!"); },
+		success: (response) => {
+			if(!response || typeof response != "object") return alert("E004. Please refresh the page!");
+			setTimeout(() => {
+				$("#testSolarControllers .notif").removeClass("loading error success");
+				var allCorrect = true;
+				if(response.hasOwnProperty("1553")) {
+					if(hasController1 && !response["1553"].hasOwnProperty("1")) allCorrect = false;
+					if(hasController2 && !response["1553"].hasOwnProperty("2")) allCorrect = false;
+					if(hasController3 && !response["1553"].hasOwnProperty("3")) allCorrect = false;
+					if(hasController4 && !response["1553"].hasOwnProperty("4")) allCorrect = false;
+					if(hasController5 && !response["1553"].hasOwnProperty("5")) allCorrect = false;
+					if(hasController6 && !response["1553"].hasOwnProperty("6")) allCorrect = false;
+					if(hasController7 && !response["1553"].hasOwnProperty("7")) allCorrect = false;
+					if(hasController8 && !response["1553"].hasOwnProperty("8")) allCorrect = false;
+				} else allCorrect = false;
+				if(allCorrect) {
+					$("#testSolarControllers .notif").addClass("success");
+					$("#log p:last-child").html(`<b class="mr-1">✓</b> ${lang.system_test.performing_test}`);
+					setTimeout(disableAutomatic, 1250);
+				} else {
+					$("#testSolarControllers .notif").addClass("error");
+					$("#log p:last-child").html(`<b class="mr-1">✗</b> ${lang.system_test.performing_test}`);
+					setTimeout(testSolarControllers, 5000);
+				}
+			}, 2500);
+			solarControllers_firstRun = false;
 		}
 	});
 

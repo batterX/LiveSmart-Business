@@ -133,16 +133,12 @@ $("#btnFinishInstallation").on("click", () => {
 
 	$("#btnFinishInstallation").attr("disabled", "disabled");
 
-	deviceModel = "batterX UPS";
-
 	var data = new FormData();
 
 	data.append("action" , "finish_installation");
 	data.append("has_device", "1");
 
 	data.append("lang", ["de","fr","cs","es"].includes($("#lang").val()) ? $("#lang").val() : "en");
-
-	if(dataObj.hasOwnProperty("box_serial") && dataObj["box_serial"].length >= 10) data.append("type", dataObj["box_serial"].substr(4, 2).toLowerCase());
 
 	if(dataObj.hasOwnProperty("installation_date"              ) && dataObj["installation_date"              ] != "") data.append("installation_date"              , dataObj["installation_date"              ]);
 
@@ -174,7 +170,7 @@ $("#btnFinishInstallation").on("click", () => {
 	if(dataObj.hasOwnProperty("system_serial"                  ) && dataObj["system_serial"                  ] != "") data.append("system_serial"                  , dataObj["system_serial"                  ]);
 
 	if(dataObj.hasOwnProperty("device_serial"                  ) && dataObj["device_serial"                  ] != "") data.append("device_serial"                  , dataObj["device_serial"                  ]);
-	if(dataObj.hasOwnProperty("device_model"                   ) && dataObj["device_model"                   ] != "") data.append("device_model"                   , dataObj["device_model"                   ]);
+	if(dataObj.hasOwnProperty("device_partnumber"              ) && dataObj["device_partnumber"              ] != "") data.append("device_partnumber"              , dataObj["device_partnumber"              ]);
 	if(dataObj.hasOwnProperty("device_power"                   ) && dataObj["device_power"                   ] != "") data.append("device_power"                   , dataObj["device_power"                   ]);
 	if(dataObj.hasOwnProperty("solar_wattpeak"                 ) && dataObj["solar_wattpeak"                 ] != "") data.append("solar_wattpeak"                 , dataObj["solar_wattpeak"                 ]);
 	if(dataObj.hasOwnProperty("solar_info"                     )                                                    ) data.append("solar_info"                     , dataObj["solar_info"                     ]);
@@ -182,6 +178,7 @@ $("#btnFinishInstallation").on("click", () => {
 
 	if(dataObj.hasOwnProperty("box_apikey"                     ) && dataObj["box_apikey"                     ] != "") data.append("box_apikey"                     , dataObj["box_apikey"                     ]);
 	if(dataObj.hasOwnProperty("box_serial"                     ) && dataObj["box_serial"                     ] != "") data.append("box_serial"                     , dataObj["box_serial"                     ]);
+	if(dataObj.hasOwnProperty("box_partnumber"                 ) && dataObj["box_partnumber"                 ] != "") data.append("box_partnumber"                 , dataObj["box_partnumber"                 ]);
 	if(dataObj.hasOwnProperty("software_version"               ) && dataObj["software_version"               ] != "") data.append("software_version"               , dataObj["software_version"               ]);
 
 	if(dataObj.hasOwnProperty("solar_controllers_serialnumbers") && dataObj["solar_controllers_serialnumbers"] != "") data.append("solar_controllers_serialnumbers", dataObj["solar_controllers_serialnumbers"]);
@@ -262,7 +259,7 @@ $("#btnFinishInstallation").on("click", () => {
 			data.append("pdf_file", pdfBlob, lang.bs_summary.installation_summary);
 
 			$.post({
-				url: "https://api.batterx.app/v1/install.php",
+				url: "https://api.batterx.app/v2/install.php",
 				data: data,
 				processData: false,
 				contentType: false,

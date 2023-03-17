@@ -237,7 +237,7 @@ function verifySolarControllers() {
 		if(canContinue) {
 			canContinue = false;
 			$.post({
-				url: "https://api.batterx.app/v1/install.php",
+				url: "https://api.batterx.app/v2/install.php",
 				async: false,
 				data: {
 					action: "verify_controller",
@@ -291,7 +291,7 @@ function verifyModulesLiFePO() {
 		if(canContinue) {
 			canContinue = false;
 			$.post({
-				url: "https://api.batterx.app/v1/install.php",
+				url: "https://api.batterx.app/v2/install.php",
 				async: false,
 				data: {
 					action: "verify_battery",
@@ -314,7 +314,7 @@ function verifyModulesLiFePO() {
 		if(canContinue) {
 			canContinue = false;
 			$.post({
-				url: "https://api.batterx.app/v1/install.php",
+				url: "https://api.batterx.app/v2/install.php",
 				async: false,
 				data: {
 					action: "verify_bms",
@@ -336,7 +336,7 @@ function verifyModulesLiFePO() {
 	if(canContinue) {
 		canContinue = false;
 		$.post({
-			url: "https://api.batterx.app/v1/install.php",
+			url: "https://api.batterx.app/v2/install.php",
 			async: false,
 			data: {
 				action: "verify_bms",
@@ -432,8 +432,8 @@ function showSystemInfo(json) {
 		$("#bx_system").val(json.system.serialnumber).attr("disabled", true);
 
 	// Set Device Info
-	if(json.hasOwnProperty("device") && json.device.hasOwnProperty("nominal_power"))
-		$("#bx_model").val(json.device.nominal_power).attr("disabled", true);
+	if(json.hasOwnProperty("device") && json.device.hasOwnProperty("nominal_power")) // TODO
+		$("#bx_model").val(json.device.nominal_power).attr("disabled", true); // TODO
 
 	// Set Installation Date
 	if(json.hasOwnProperty("installation_date"))
@@ -751,7 +751,7 @@ function showImportDataFromCloud() {
     if(dataSettings["CloudSet"]["0"]["mode"].toString() != "0") return;
 
     $.post({
-        url: "https://api.batterx.app/v1/install.php",
+        url: "https://api.batterx.app/v2/install.php",
         data: {
             action : "get_system_data",
             system : $("#bx_system").val().trim(),
@@ -1194,7 +1194,7 @@ function step1() {
 function step2() {
 
 	$.post({
-		url: "https://api.batterx.app/v1/install.php",
+		url: "https://api.batterx.app/v2/install.php",
 		data: {
 			action: "get_installation_info",
 			apikey: systemApikey
@@ -1231,9 +1231,9 @@ function step2() {
 function step3() {
 
 	$.post({
-		url: "https://api.batterx.app/v1/install.php",
+		url: "https://api.batterx.app/v2/install.php",
 		data: {
-			action: "get_box_serial",
+			action: "get_box_info",
 			apikey: systemApikey
 		},
 		error: () => { alert("E005. Please refresh the page!"); },
@@ -1241,19 +1241,22 @@ function step3() {
 
 			console.log(response);
 
-			var box_serial = response;
+			var box_info = response;
 
-			if(!box_serial) return $("#errorBoxNotRegistered").modal("show");
+			if(!box_info) return $("#errorBoxNotRegistered").modal("show");
 
-			// Save LiveX Serial-Number to Session
+			// Save LiveX Serial-Number & Part-Number to Session
 			$.post({
 				url: "cmd/session.php",
-				data: { box_serial: box_serial },
+				data: {
+					box_serial: box_info.serialnumber,
+					box_partnumber: box_info.partnumber
+				},
 				error: () => { alert("E006. Please refresh the page!"); },
 				success: (response) => {
 					console.log(response);
 					if(response !== "1") return alert("E007. Please refresh the page!");
-					$("#bx_box").val(box_serial);
+					$("#bx_box").val(box_info.serialnumber);
 					step4();
 				}
 			});
@@ -1370,7 +1373,7 @@ function mainFormSubmit_2() {
 
 	// Check UPS S/N
 	$.post({
-		url: "https://api.batterx.app/v1/install.php",
+		url: "https://api.batterx.app/v2/install.php",
 		data: {
 			action       : "verify_device",
 			serialnumber : $("#bx_system").val(),
@@ -1378,9 +1381,42 @@ function mainFormSubmit_2() {
 		},
 		error: () => { alert("E008. Please refresh the page!"); },
 		success: (response) => {
+
 			console.log(response);
+
 			if(response !== "1") $("#errorUpsRegisteredWithOtherSystem").modal("show");
-			mainFormSubmit_3();
+
+			$.post({
+                url: "https://api.batterx.app/v2/install.php",
+                data: {
+                    action       : "get_device_partnumber",
+                    serialnumber : $("#bx_system").val()
+                },
+                error: () => { alert("Error. Please refresh the page!"); },
+                success: (response) => {
+                    
+                    console.log(response);
+
+                    if(!response) return alert("Error! Device partnumber cannot be empty!");
+
+                    // Save Device Serialnumber & Partnumber to Session
+                    $.post({
+                        url: "cmd/session.php",
+                        data: {
+                            device_serial: $("#bx_system").val(),
+                            device_partnumber: response
+                        },
+                        error: () => { alert("E010. Please refresh the page!"); },
+                        success: (response) => {
+                            console.log(response);
+                            if(response !== "1") return alert("E011. Please refresh the page!");
+                            mainFormSubmit_3();
+                        }
+                    });
+
+                }
+            });
+
 		}
 	});
 
@@ -1538,7 +1574,6 @@ function setValuesToSession() {
 	tempData.installation_date      = $("#installation_date     ").val();
 	tempData.system_serial          = $("#bx_system             ").val();
 	tempData.device_serial          = $("#bx_system             ").val();
-	tempData.device_model           = "batterX UPS";
 	tempData.device_power           = $("#bx_model              ").val();
 	tempData.note                   = $("#installer_memo        ").val();
 	tempData.solar_wattpeak         = $("#solar_total_power     ").val();

@@ -76,6 +76,11 @@ $batteryType = isset($_SESSION["battery_type"]) ? $_SESSION["battery_type"] : "o
 								<span><?php echo $lang["system_test"]["energy_meter"]; ?></span>
 							</div>
 
+							<div id="testSolarControllers" class="status d-flex align-items-center mt-4">
+								<div class="notif"></div>
+								<span><?php echo $lang["system_test"]["solar_controllers"]; ?><span></span>
+							</div>
+
 							<div id="testBatteryCharging" class="status d-flex align-items-center mt-4" <?php echo $noBattery ? "style='display:none !important'" : "" ?>>
 								<div class="notif"></div>
 								<span><?php echo $lang["system_test"]["battery_charging"]; ?><span></span></span>
