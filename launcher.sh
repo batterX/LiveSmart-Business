@@ -10,11 +10,3 @@ then
 	sudo ./MqttStream &
 	cd /
 fi
-
-if ! pgrep -x "CloudStream" > /dev/null
-then
-	cd /
-	cd home/pi
-	sudo ./CloudStream &
-	cd /
-fi
