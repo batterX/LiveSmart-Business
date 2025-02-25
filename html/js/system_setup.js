@@ -1862,7 +1862,7 @@ function setup1() {
 	var batteryCount               = 30;
 	var batteryAh                  = 0;
 	var batteryMaxChargeC          = 20;
-	var batteryMaxDischargeC       = 100;
+	var batteryMaxDischargeC       = 40;
 	var batteryStartChargeCurrent  = -10;
 	var batteryChargeCurrent       = 0;
 	var batteryMinDischargeVoltage = 0;
@@ -1893,7 +1893,7 @@ function setup1() {
 		batteryCount               = 30;
 		batteryAh                  = parseInt($("#carbon_battery_ah").val().split(" ")[0]);
 		batteryMaxChargeC          = 20;
-		batteryMaxDischargeC       = 100;
+		batteryMaxDischargeC       = 40;
 		batteryChargeCurrent       = Math.round(batteryAh * 0.20 * 100);
 		batteryMinDischargeVoltage = 35600;
 		batteryVoltageHysteresis   = 5000;
